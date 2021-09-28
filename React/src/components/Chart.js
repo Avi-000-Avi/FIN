@@ -15,7 +15,7 @@ import {
 import Skateboard from "../skateboard.png";  
 
   
-  const Cart = () => {
+  const Chart = () => {
     const { toggleColorMode } = useColorMode();
     const bgColor = useColorModeValue('gray.50', 'whiteAlpha.50');
     const secondaryTextColor = useColorModeValue('gray.600', 'gray.400');
@@ -81,4 +81,4 @@ import Skateboard from "../skateboard.png";
     );
   };
   
-  export default Cart;
+  export default Chart;
