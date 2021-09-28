@@ -1,21 +1,30 @@
-import {Container,Flex,VStack,Heading,Text,SimpleGrid,GridItem,FormControl,FormLabel,Input,Select,Checkbox,Button} from "@chakra-ui/react";
-import { useMoralis } from "react-moralis";
+  
+import React from "react";
+
+import { ContractProvider } from "./contexts/ContractContext";
+
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+//styling
+
+
+import MintPage from "./components/MintPage";
+import Landing from "./components/Landing";
+
+
 
 function App()   {
-  const { authenticate, isAuthenticated, user } = useMoralis();
 
-  if (!isAuthenticated) {
-    return (
-      <div>
-        <button onClick={() => authenticate()}>Authenticate</button>
-      </div>
-    );
-  }
 
   return (
-    <div>
-      <h1>Welcome {user.get("username")}</h1>
-    </div>
+    <ContractProvider>
+
+    <Route exact path='/' component={Landing}/>
+    <Route exact path='/app' component={MintPage}/>
+
+    </ContractProvider>
+
+
   );
 }
 

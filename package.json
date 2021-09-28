@@ -3,7 +3,6 @@
     "@openzeppelin/contracts": "^4.3.2",
     "@uniswap/v3-core": "^1.0.0",
     "@uniswap/v3-periphery": "^1.2.0",
-    "ganache": "^6.4.5",
     "hardhat": "^2.6.4"
   },
   "devDependencies": {
@@ -32,7 +31,6 @@
     "fork": "hardhat node --no-deploy --network hardhat --fork https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F",
     "test": "hardhat test --network hardhat",
     "compile": "hardhat compile",
-    "deploy": "hardhat deploy",
-    "ganache": "ganache --wallet.seed myCustomSeed"
+    "deploy": "hardhat run --network localhost scripts/deploy.js"
   }
 }
