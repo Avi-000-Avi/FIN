@@ -28,7 +28,7 @@ import Skateboard from "../skateboard.png";
         align="flex-start"
         bg={bgColor}
       >
-       {/* <VStack alignItems="flex-start" spacing={3}>
+       <VStack alignItems="flex-start" spacing={3}>
           <Heading size="2xl">Your cart</Heading>
           <Text>
             If the price is too hard on your eyes,{' '}
@@ -76,7 +76,7 @@ import Skateboard from "../skateboard.png";
           <Text color={secondaryTextColor}>Total</Text>
           <Heading size="lg">$162.79</Heading>
         </HStack>
-    */}
+   
       </VStack>
     );
   };

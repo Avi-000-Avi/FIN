@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import {Container,Flex,VStack,Heading,Text,SimpleGrid,
   GridItem,FormControl,FormLabel,Input,Select,Checkbox
   ,HStack,Image,AspectRatio,Divider,Stack,Button,
   useColorMode,useColorModeValue,Box} from "@chakra-ui/react";
 
-import Chart from "./components/Chart";
+  import { MdBuild, MdCall } from 'react-icons/md';
+  import {FcCandleSticks} from 'react-icons/fc';
+
 import Details from "./components/Details";
+
 import { useMoralis,ByMoralis,useMoralisWeb3Api , } from "react-moralis";
 import { Moralis } from "moralis";
 
 import { ethers } from "ethers";
+const TradingViewComponent = React.lazy(() => import('./components/TradingViewComponent'));
 
-import IPositionManager from './artifacts/contracts/IPositionManager.sol/IPositionManager.json';
-import PositionManager from './artifacts/contracts/PositionManager.sol/PositionManager.json';
+
+//import IPositionManager from './artifacts/contracts/IPositionManager.sol/IPositionManager.json';
+//import PositionManager from './artifacts/contracts/PositionManager.sol/PositionManager.json';
 
 const address = "0x03F06b2f2E7AaE545Ecd266F591407B1bA733037";
 
@@ -41,8 +46,13 @@ Moralis.serverURL = serverUrl;
 
 
 function App() {
+  const pairs = 'ETHUSDT' //need to grab state from details and share in parent component between details and trading view comp
+  //so when form inputs are changed, trading view widget rerenders
+
+  
+
   const [selectedToken, setSelectedToken] = useState();
-  const [positionManager,setPositionManager] = useState(PositionManager);
+  const [positionManager,setPositionManager] = useState();
   const [loggedInAddress,setLoggedInAddress] = useState();
   const [allTokenBalances,setAllTokenBalances] = useState();
   
@@ -88,20 +98,34 @@ function App() {
   return (
      <Container maxW="container.xl" p ={5}>
 
-          <Flex>
-        <Heading ml="8" size="md" fontWeight='semibold' color="cyan.400" paddingRight={10}>
-        <Button size="lg" boxShadow="xl" onClick={() => logout()}>
+<Stack direction="row" spacing={4}>
+
+<Button size="lg" boxShadow="xl" leftIcon={<FcCandleSticks />} colorScheme="gray" variant="solid" onClick={TradingViewComponent}>
+  </Button>
+
+  <Button size="lg" boxShadow="xl" onClick={() => logout()}>
             Disconnect Wallet
           </Button>
+</Stack>
+
+          <Flex>
+        <Heading ml="8" size="md" fontWeight='semibold' color="cyan.400" paddingRight={10}>
+
           </Heading>
           <Text boxShadow="sm" width="fit-content" height = "fit-content" alignItems="center" p={2} backgroundColor='#6AD5EE'>{user.get("ethAddress")}</Text>
         </Flex>
 
     <Flex py={10}>
       <Details />
-      <Chart />
+
+      <Suspense fallback={<div></div>}>
+      <TradingViewComponent pairs={pairs}/>
+      </Suspense>
+      
+      
     </Flex>
 
+   
     
   </Container>
   );
