@@ -1,39 +1,17 @@
-<<<<<<< HEAD
-  
-import React from "react";
-
-import { ContractProvider } from "./contexts/ContractContext";
-
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-//styling
-
-
-import MintPage from "./components/MintPage";
-import Landing from "./components/Landing";
-
-
-
-function App()   {
-
-
-  return (
-    <ContractProvider>
-
-    <Route exact path='/' component={Landing}/>
-    <Route exact path='/app' component={MintPage}/>
-
-    </ContractProvider>
-
-
-=======
 import React, { useEffect, useState, Suspense } from "react";
+import web3 from "web3";
 import {Container,Flex,VStack,Heading,Text,SimpleGrid,
   GridItem,FormControl,FormLabel,Input,Select,Checkbox
   ,HStack,Image,AspectRatio,Divider,Stack,Button,
   useColorMode,useColorModeValue,Box} from "@chakra-ui/react";
 
-  import { MdBuild, MdCall } from 'react-icons/md';
+  import { abi } from "./abi/abi";
+
+  import {
+    FormErrorMessage,
+    FormHelperText,
+  } from "@chakra-ui/react"
+
   import {FcCandleSticks} from 'react-icons/fc';
 
 import Details from "./components/Details";
@@ -41,7 +19,27 @@ import Details from "./components/Details";
 import { useMoralis,ByMoralis,useMoralisWeb3Api , } from "react-moralis";
 import { Moralis } from "moralis";
 
-import { ethers } from "ethers";
+import { ethers, Signer } from "ethers";
+const contractAddress = '0xCD8a1C3ba11CF5ECfa6267617243239504a98d90';
+const ABI = abi.abi;
+const ALCHEMY = "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F"
+
+
+//const provider = new ethers.providers.Web3Provider(web3.currentProvider);
+const provider = new ethers.providers.JsonRpcProvider()
+// const provider = ethers.getDefaultProvider("mainnet", { 
+//   alchemy: ALCHEMY,
+//   });
+
+// const signer = Signer.connect(provider)
+
+const contract = new ethers.Contract(contractAddress, ABI, provider);
+
+
+//const mint = contract.mint( holdToken, collateralToken, amount, swapOnMint,stopLoss ,takeProfit);
+//mint(address holdToken, uint256 amount, uint256 stopLoss, uint256 takeProfit)
+
+
 const TradingViewComponent = React.lazy(() => import('./components/TradingViewComponent'));
 
 
@@ -50,12 +48,15 @@ const TradingViewComponent = React.lazy(() => import('./components/TradingViewCo
 
 const address = "0x03F06b2f2E7AaE545Ecd266F591407B1bA733037";
 
+
 const appId = "ZPm0AMIy2nn0lSdNgDLg6g7tVRP6F7gK2t9L6V6f";
 const serverUrl = "https://ddnwackqf7dj.moralishost.com:2053/server";
 
 
 Moralis.initialize(appId);
 Moralis.serverURL = serverUrl;
+
+
 
 //ToDO
 //0x12aADAdd301d22c941DACF2cfa7A9e2019972F61 -> Changes to 0x12aadadd301d22c941dacf2cfa7a9e2019972f61
@@ -75,9 +76,39 @@ Moralis.serverURL = serverUrl;
 
 
 function App() {
-  const pairs = 'ETHUSDT' //need to grab state from details and share in parent component between details and trading view comp
+  console.log(contract)
+
+  const signer = provider.getSigner();
+  const signedContract = contract.connect(signer);
+  console.log(signedContract)
+
+  let positions
+
+  const DAIaddress = '0x6b175474e89094c44da98b954eedeac495271d0f'
+
+  const mint = async () =>{
+    let mintTx = await signedContract.mint(DAIaddress, 
+      DAIaddress,1, false, 1,1,
+    {gasPrice: 17677403218, gasLimit: 1000000}
+    ).then(res=>console.log(res))
+
+  }
+  mint();
+
+
+
+
+ 
+
+  //need to grab state from details and share in parent component between details and trading view comp
   //so when form inputs are changed, trading view widget rerenders
 
+  const [pairs, setPairs, reset] = useState('ETHUSDT')
+
+  const changePairs = (e)=>{
+    e.preventDefault()
+    setPairs(e.target.value)}
+  
   
 
   const [selectedToken, setSelectedToken] = useState();
@@ -135,6 +166,12 @@ function App() {
   <Button size="lg" boxShadow="xl" onClick={() => logout()}>
             Disconnect Wallet
           </Button>
+
+          <Button size="lg" boxShadow="xl" onClick={ async () => await signedContract.getOwnedPositions()}>
+            get positions
+          </Button>
+
+          
 </Stack>
 
           <Flex>
@@ -154,10 +191,14 @@ function App() {
       
     </Flex>
 
+    <FormControl onChange={changePairs} id="email">
+  <FormLabel>Email address</FormLabel>
+  <Input type="email" value={pairs}/>
+  <FormHelperText>We'll never share your email.</FormHelperText>
+</FormControl>
    
     
   </Container>
->>>>>>> Avinash
   );
 }
 

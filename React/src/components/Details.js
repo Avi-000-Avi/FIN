@@ -40,7 +40,7 @@ import { id } from "@ethersproject/hash";
         <GridItem colSpan={2}>
           <Flex spacing={30}>
           <GridItem colSpan={1}>
-            <Select>{
+            <Select >{
             tokenList.map((token,id) =>
             <option key={id}>{token.symbol}</option>
             )}

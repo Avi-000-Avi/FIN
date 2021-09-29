@@ -4,6 +4,7 @@
     "@uniswap/v3-core": "^1.0.0",
     "@uniswap/v3-periphery": "^1.2.0",
     "hardhat": "^2.6.4",
+    "hardhat-deploy": "^0.9.2",
     "react-moralis": "^0.2.3"
   },
   "devDependencies": {
@@ -28,15 +29,11 @@
     "solidity-coverage": "^0.7.16"
   },
   "scripts": {
-<<<<<<< HEAD
     "chain": "hardhat node --network hardhat",
-    "fork": "hardhat node --no-deploy --network hardhat --fork https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F",
-=======
-    "chain": "hardhat node --network hardhat --no-deploy",
-    "fork": "hardhat node --no-deploy --network hardhat --fork https://eth-mainnet.alchemyapi.io/v2/tOMgvfIYs5g8k6rvMVVjZEEsxT6MSMoa",
->>>>>>> Avinash
+    "fork": "hardhat node --network hardhat --fork https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F",
     "test": "hardhat test --network hardhat",
     "compile": "hardhat compile",
-    "deploy": "hardhat run --network localhost scripts/deploy.js"
+    "deploy": "hardhat run --network hardhat scripts/deploy.js",
+    "fund-wallet": "node scripts/fund_wallet.js"
   }
 }

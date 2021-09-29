@@ -10,7 +10,7 @@ export default function TradingViewComponent(props) {
     return (
         <TradingViewWidget
         symbol={props.pairs}
-        theme={Themes.DARK}
+        theme={Themes.LIGHT}
         locale="eng"
         width={'650'}
         height={'500'}
