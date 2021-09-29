@@ -35,6 +35,9 @@ module.exports = {
       },
     ],
   },
+  paths: {
+    artifacts: './artifacts',
+  },
   namedAccounts: {
     deployer: {
       default: 0, // here this will by default take the first account as deployer
@@ -43,13 +46,13 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F",
+        url: "https://eth-mainnet.alchemyapi.io/v2/tOMgvfIYs5g8k6rvMVVjZEEsxT6MSMoa",
         blockNumber: 13072475,
         accounts:
           process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       }
     },
-    localhost: {
+    localhost: { 
       url: "http://localhost:8545",
       /*
         notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
