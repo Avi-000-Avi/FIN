@@ -1,6 +1,6 @@
 const { ethers } = require("hardhat");
 const parseArgs = require("minimist");
-const { ERC20_ABI, Tokens, WhaleAccounts } = require("../test/constants");
+const ERC20_ABI = "";
 
 const MANDATORY_PARAMETERS = Object.freeze([
   ["amount", ["amount", "q"]],
