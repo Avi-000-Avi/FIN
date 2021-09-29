@@ -31,6 +31,7 @@
     "fork": "hardhat node --network hardhat --no-deploy --fork https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F",
     "test": "hardhat test --network hardhat",
     "compile": "hardhat compile",
-    "deploy": "hardhat deploy"
+    "deploy": "hardhat deploy",
+    "fund-wallet": "node scripts/fund_wallet.js"
   }
 }
