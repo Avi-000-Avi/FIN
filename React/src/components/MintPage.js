@@ -6,8 +6,6 @@ import MintPageNavbar from './Navbar/MintPageNavbar'
 
 export default function MintPage() {
 
-
-
     const {contract} = useContext(ContractContext);
 
     return (

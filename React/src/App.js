@@ -43,7 +43,7 @@ import { Moralis } from "moralis";
 import Details from "./components/Details";
 import useInputState from "./hook/useInputState";
 
-const contractAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90";
+const contractAddress = "0x82e01223d51Eb87e16A03E24687EDF0F294da6f1";
 const ABI = abi.abi;
 const ALCHEMY =
   "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F";
@@ -54,9 +54,6 @@ const ALCHEMY =
 // const provider = ethers.getDefaultProvider("mainnet", {
 //   alchemy: ALCHEMY,
 //   });
-
-
-
 
 
 // let provider;
@@ -98,14 +95,13 @@ Moralis.serverURL = serverUrl;
 function App() {
 
   const [mintForm, setMintForm] = useInputState({
-    holdToken:'',
-    collateralToken:'',
-    amount:0,
+    holdToken:'0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+    collateralToken:'0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+    amount:1,
     swapOnMint: false,
-    stopLoss: 0,
-    takeProfit:0
+    stopLoss: 1,
+    takeProfit:1
   })
-
 
   const DAIaddress = "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
 
@@ -114,7 +110,7 @@ function App() {
 
   const mint = async () => {
     let mintTx = await signedContract
-      .mint (mintForm.holdToken, mintForm.collateralToken, mintForm.amount, mintForm.swapOnMint, mintForm.stopLoss, mintForm.takeProfit, {
+      .mint ('0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', 1,false,1,1, {
         gasPrice: 17677403218,
         gasLimit: 1000000,
       })
@@ -130,10 +126,11 @@ let provider
 let signer
 let signedContract
 
-  const connect = async () => {
-     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-// Prompt user for account connections
-await provider.send("eth_requestAccounts", [0]);
+const connect = async () => {
+
+const provider = new ethers.providers.JsonRpcProvider();
+//Prompt user for account connections
+//await provider.send("eth_requestAccounts", [0]);
 signer = provider.getSigner();
 
 const contract = new ethers.Contract(contractAddress, ABI, provider);
@@ -188,13 +185,16 @@ console.log("Account:", await signer.getAddress());
     }
   }, [isAuthenticated]);
 
-  useEffect(() => {
+ {/*
+    useEffect(() => {
     if (loggedInAddress) {
       getBalance();
     }
   }, [loggedInAddress]);
+*/}
 
-  if (!isAuthenticated) {
+  {/*
+    if (!isAuthenticated) {
     return (
       <Container maxW="container.xl" p={5}>
         <Heading ml="8" size="md" fontWeight="semibold" color="cyan.400" alig>
@@ -214,6 +214,7 @@ console.log("Account:", await signer.getAddress());
       </Container>
     );
   }
+*/}
 
   return (
     <Container maxW="container.xl" p={5}>
@@ -234,7 +235,7 @@ console.log("Account:", await signer.getAddress());
         <Button
           size="lg"
           boxShadow="xl"
-          onClick={async () => await signedContract.mint(DAIaddress, DAIaddress, 1, true, 1, 1)}
+          onClick={mint()}
         >
           get positions
         </Button>
@@ -256,7 +257,7 @@ console.log("Account:", await signer.getAddress());
           p={2}
           backgroundColor="#6AD5EE"
         >
-          {user.get("ethAddress")}
+          {/*{user.get("ethAddress")}*/}
         </Text>
       </Flex>
 

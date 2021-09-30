@@ -5,13 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MoralisProvider } from "react-moralis";
 import { BrowserRouter as Router } from 'react-router-dom'
+import {ChakraProvider} from "@chakra-ui/react";
 
 ReactDOM.render(
+  <ChakraProvider>
+
   <MoralisProvider appId="4S12Z6OWMk2IkfGcKr712xLVTldKoSt2jM2PXM0T" serverUrl="https://jatfccjcovh3.moralishost.com:2053/server">
     <Router>
     <App />
     </Router>
-  </MoralisProvider>,
+  </MoralisProvider>
+  </ChakraProvider>
+  ,
   document.getElementById('root')
 );
 
