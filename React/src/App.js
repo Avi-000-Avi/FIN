@@ -43,7 +43,7 @@ import { Moralis } from "moralis";
 import Details from "./components/Details";
 import useInputState from "./hook/useInputState";
 
-const contractAddress = "0x82e01223d51Eb87e16A03E24687EDF0F294da6f1";
+const contractAddress = "0x7969c5eD335650692Bc04293B07F5BF2e7A673C0";
 const ABI = abi.abi;
 const ALCHEMY =
   "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F";
@@ -103,14 +103,16 @@ function App() {
     takeProfit:1
   })
 
+  console.log(mintForm.holdToken)
+
+
   const DAIaddress = "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
 
   //mint(address holdToken, address CollateralToken,  uint256 amount, boolean swapOnMint,  uint256 stopLoss, uint256 takeProfit)
   // MAKE EACH OF THESE INPUTS INTO FORM CONTROL
 
   const mint = async () => {
-    let mintTx = await signedContract
-      .mint ('0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', 1,false,1,1, {
+    let mintTx = await signedContract.mint(mintForm.holdToken, mintForm.collateralToken, mintForm.amount, mintForm.swapOnMint, mintForm.stopLoss, mintForm.takeProfit, {
         gasPrice: 17677403218,
         gasLimit: 1000000,
       })
@@ -126,18 +128,18 @@ let provider
 let signer
 let signedContract
 
-const connect = async () => {
-
-const provider = new ethers.providers.JsonRpcProvider();
-//Prompt user for account connections
-//await provider.send("eth_requestAccounts", [0]);
-signer = provider.getSigner();
+  const connect = async () => {
+     //provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+     provider = new ethers.providers.JsonRpcProvider();
+      // Prompt user for account connections
+      // await provider.send("eth_requestAccounts", [0]);
+      signer = provider.getSigner();
 
 const contract = new ethers.Contract(contractAddress, ABI, provider);
 
 signedContract = contract.connect(signer);
 
-console.log(signer)
+console.log(contract)
 
 console.log("Account:", await signer.getAddress());
 
@@ -147,7 +149,7 @@ console.log("Account:", await signer.getAddress());
   
 
 
-  const [pairs, setPairs, reset] = useState("UNIDAI");
+  const [pairs, setPairs, reset] = useInputState("UNIDAI");
 
   const changePairs = (e) => {
     e.preventDefault();
@@ -235,7 +237,7 @@ console.log("Account:", await signer.getAddress());
         <Button
           size="lg"
           boxShadow="xl"
-          onClick={mint()}
+          onClick={mint}
         >
           get positions
         </Button>

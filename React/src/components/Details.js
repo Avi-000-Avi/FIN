@@ -21,7 +21,6 @@ import { id } from "@ethersproject/hash";
   const Details = (props) => {
 
   const tokenList = useTokenList("https://gateway.ipfs.io/ipns/tokens.uniswap.org");
-  console.log(tokenList);
   
   const [input, setInput] = useState(0)
   const [collateral, setCollateral] = useState(0)
@@ -101,9 +100,9 @@ import { id } from "@ethersproject/hash";
             </Button>
           </GridItem>
 <GridItem>
-<FormControl onChange={props.setMintForm} id="email">
+<FormControl  onChange={props.setMintForm} id="email">
         <FormLabel>Email address</FormLabel>
-        <Input type="text" value={props.mintForm} />
+        <Input type="text" value={props.mintForm.holdToken} />
         <FormHelperText>We'll never share your email.</FormHelperText>
       </FormControl>
 </GridItem>
