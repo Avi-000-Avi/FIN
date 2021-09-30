@@ -39,10 +39,10 @@ async function main() {
     const [name, [long, short]] = param;
     parameters[name] = argv[long] || argv[short];
   });
-
-  const token = parameters.token;
+// TOKEN AND WHALE NOT BEING PARSED PROPERLY SO HAVE TO HARD CODE
+  const token = '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2';
   const address = parameters.address;
-  const whale = parameters.whale;
+  const whale = '0x6555e1CC97d3cbA6eAddebBCD7Ca51d75771e0B8';
   const amount = parameters.amount;
 
   const tokenInstance = await ethers.getContractAt(
@@ -55,11 +55,13 @@ async function main() {
 
   const impersonatedAccount = ethers.provider.getSigner(whale);
 
+  console.log('fake account', impersonatedAccount)
+
   const amountToken = ethers.utils.parseUnits(amount, 18);
   console.log("SENDING TOKENS");
   console.log("Amount => ", amountToken);
   console.log("Of => ", tokenInstance.address);
-  console.log("From => ", impersonatedAccount.address);
+  console.log("From => ", impersonatedAccount._address);
   console.log("To => ", address);
   await tokenInstance
     .connect(impersonatedAccount)
