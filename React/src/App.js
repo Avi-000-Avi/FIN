@@ -98,13 +98,15 @@ Moralis.serverURL = serverUrl;
 function App() {
 
   const [mintForm, setMintForm] = useInputState({
-    holdToken:'',
-    collateralToken:'',
-    amount:0,
+    holdToken:'0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+    collateralToken:'0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+    amount:1,
     swapOnMint: false,
-    stopLoss: 0,
-    takeProfit:0
+    stopLoss: 1,
+    takeProfit:1
   })
+
+  console.log(mintForm.holdToken)
 
 
   const DAIaddress = "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
@@ -113,8 +115,7 @@ function App() {
   // MAKE EACH OF THESE INPUTS INTO FORM CONTROL
 
   const mint = async () => {
-    let mintTx = await signedContract
-      .mint (mintForm.holdToken, mintForm.collateralToken, mintForm.amount, mintForm.swapOnMint, mintForm.stopLoss, mintForm.takeProfit, {
+    let mintTx = await signedContract.mint(mintForm.holdToken, mintForm.collateralToken, mintForm.amount, mintForm.swapOnMint, mintForm.stopLoss, mintForm.takeProfit, {
         gasPrice: 17677403218,
         gasLimit: 1000000,
       })
@@ -131,16 +132,17 @@ let signer
 let signedContract
 
   const connect = async () => {
-     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+     //provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+     provider = new ethers.providers.JsonRpcProvider();
 // Prompt user for account connections
-await provider.send("eth_requestAccounts", [0]);
+// await provider.send("eth_requestAccounts", [0]);
 signer = provider.getSigner();
 
 const contract = new ethers.Contract(contractAddress, ABI, provider);
 
 signedContract = contract.connect(signer);
 
-console.log(signer)
+console.log(contract)
 
 console.log("Account:", await signer.getAddress());
 
@@ -150,7 +152,7 @@ console.log("Account:", await signer.getAddress());
   
 
 
-  const [pairs, setPairs, reset] = useState("UNIDAI");
+  const [pairs, setPairs, reset] = useInputState("UNIDAI");
 
   const changePairs = (e) => {
     e.preventDefault();
@@ -234,7 +236,7 @@ console.log("Account:", await signer.getAddress());
         <Button
           size="lg"
           boxShadow="xl"
-          onClick={async () => await signedContract.mint(DAIaddress, DAIaddress, 1, true, 1, 1)}
+          onClick={mint}
         >
           get positions
         </Button>
