@@ -10,6 +10,7 @@ import {
     SimpleGrid,
     GridItem,
     Select,
+    FormHelperText,
     Checkbox,
     Button,Flex,NumberInput,NumberInputField,NumberIncrementStepper,NumberDecrementStepper,NumberInputStepper,Slider,SliderTrack,SliderThumb,SliderFilledTrack
   } from '@chakra-ui/react';
@@ -17,7 +18,7 @@ import {
   import useTokenList from "../hook/useTokenList";
 import { id } from "@ethersproject/hash";
 
-  const Details = () => {
+  const Details = (props) => {
 
   const tokenList = useTokenList("https://gateway.ipfs.io/ipns/tokens.uniswap.org");
   console.log(tokenList);
@@ -40,7 +41,7 @@ import { id } from "@ethersproject/hash";
         <GridItem colSpan={2}>
           <Flex spacing={30}>
           <GridItem colSpan={1}>
-            <Select>{
+            <Select >{
             tokenList.map((token,id) =>
             <option key={id}>{token.symbol}</option>
             )}
@@ -99,8 +100,18 @@ import { id } from "@ethersproject/hash";
               Make a swap
             </Button>
           </GridItem>
+<GridItem>
+<FormControl onChange={props.setMintForm} id="email">
+        <FormLabel>Email address</FormLabel>
+        <Input type="text" value={props.mintForm} />
+        <FormHelperText>We'll never share your email.</FormHelperText>
+      </FormControl>
+</GridItem>
+
         </SimpleGrid>
       </VStack>
+
+      
     );
   };
   
