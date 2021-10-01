@@ -40,11 +40,11 @@ async function main() {
 //     parameters[name] = argv[long] || argv[short];
 //   });
 // TOKEN AND WHALE NOT BEING PARSED PROPERLY SO HAVE TO HARD CODE
-  const token = '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9';
-  const address = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8' 
+  const token = "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9"
+  const address = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
   //parameters.address; 
   const whale = '0x6555e1CC97d3cbA6eAddebBCD7Ca51d75771e0B8';
-  const amount = '100'
+  const amount = '1000'
 
   const tokenInstance = await ethers.getContractAt(
     ERC20_ABI,
