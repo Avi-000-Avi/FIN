@@ -33,7 +33,7 @@ import { FcCandleSticks } from "react-icons/fc";
 import { abi } from "./abi/abi";
 import {web3} from "web3";
 
-import { ethers, Signer } from "ethers";
+import { ethers, BigNumber } from "ethers";
 
 import { useMoralis, ByMoralis, useMoralisWeb3Api } from "react-moralis";
 import { Moralis } from "moralis";
@@ -43,7 +43,7 @@ import { Moralis } from "moralis";
 import Details from "./components/Details";
 import useInputState from "./hook/useInputState";
 
-const contractAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90";
+const contractAddress = "0x82e01223d51eb87e16a03e24687edf0f294da6f1";
 const ABI = abi.abi;
 const ALCHEMY =
   "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F";
@@ -98,9 +98,9 @@ Moralis.serverURL = serverUrl;
 function App() {
 
   const [mintForm, setMintForm] = useInputState({
-    holdToken:'0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
-    collateralToken:'0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
-    amount:1,
+    holdToken:'0x6B175474E89094C44Da98b954EedeAC495271d0F',
+    collateralToken:'0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+    amount:10,
     swapOnMint: false,
     stopLoss: 1,
     takeProfit:1
@@ -109,18 +109,30 @@ function App() {
   console.log(mintForm.holdToken)
 
 
-  const DAIaddress = "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
+  const UNIaddress = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984";
 
   //mint(address holdToken, address CollateralToken,  uint256 amount, boolean swapOnMint,  uint256 stopLoss, uint256 takeProfit)
   // MAKE EACH OF THESE INPUTS INTO FORM CONTROL
 
+  
+
   const mint = async () => {
+
+    let chainId = 31337
+
     let mintTx = await signedContract.mint(mintForm.holdToken, mintForm.collateralToken, mintForm.amount, mintForm.swapOnMint, mintForm.stopLoss, mintForm.takeProfit, {
         gasPrice: 17677403218,
         gasLimit: 1000000,
       })
-      .then((transactionReciept) => transactionReciept.wait())
-      .then((res) => console.log(res));
+      .then((res) =>{
+        res.chainId = 31337 
+      console.log(res)
+        
+      } )
+
+      
+
+
   };
   
 
@@ -130,19 +142,23 @@ function App() {
 let provider
 let signer
 let signedContract
+let userAddress 
 
   const connect = async () => {
-     //provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-     provider = new ethers.providers.JsonRpcProvider();
+     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    //  provider = new ethers.providers.JsonRpcProvider();
 // Prompt user for account connections
-// await provider.send("eth_requestAccounts", [0]);
+await provider.send("eth_requestAccounts", [0]);
 signer = provider.getSigner();
+
 
 const contract = new ethers.Contract(contractAddress, ABI, provider);
 
 signedContract = contract.connect(signer);
 
 console.log(contract)
+
+userAddress = await signer.getAddress()
 
 console.log("Account:", await signer.getAddress());
 
@@ -238,7 +254,15 @@ console.log("Account:", await signer.getAddress());
           boxShadow="xl"
           onClick={mint}
         >
-          get positions
+         mint 
+        </Button>
+
+        <Button
+          size="lg"
+          boxShadow="xl"
+          onClick={async () => await signedContract.getOwnedPositions().then(e=> console.log (e))}
+        >
+         get positions 
         </Button>
       </Stack>
 

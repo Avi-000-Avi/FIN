@@ -2,48 +2,49 @@ const { ethers } = require("hardhat");
 const parseArgs = require("minimist");
 const { ERC20_ABI, Tokens, WhaleAccounts } = require("../test/constants");
 
-const MANDATORY_PARAMETERS = Object.freeze([
-  ["amount", ["amount", "q"]],
-  ["token", ["token", "t"]],
-  ["address", ["address", "a"]],
-  ["whale", ["whale", "w"]],
-]);
+// const MANDATORY_PARAMETERS = Object.freeze([
+//   ["amount", ["amount", "q"]],
+//   ["token", ["token", "t"]],
+//   ["address", ["address", "a"]],
+//   ["whale", ["whale", "w"]],
+// ]);
 
 async function main() {
-  const argv = parseArgs(process.argv.slice(2), {
-    string: ["address", "a", "amount", "q"],
-  });
-  console.log(argv);
+//   const argv = parseArgs(process.argv.slice(2), {
+//     string: ["address", "a", "amount", "q"],
+//   });
+//   console.log(argv);
 
-  const parametersAreOk = MANDATORY_PARAMETERS.every((parameterTuple) => {
-    const [_name, [long, short]] = parameterTuple;
-    return long in argv || short in argv;
-  });
+//   const parametersAreOk = MANDATORY_PARAMETERS.every((parameterTuple) => {
+//     const [_name, [long, short]] = parameterTuple;
+//     return long in argv || short in argv;
+//   });
 
-  if (!parametersAreOk) {
-    console.log(`
-      Missing mandatory parameter!
-      Usage:
-        yarn fund-wallet --token <TOKEN ADDRESS> --wallet <WALLET ADDRESS> --amount <AMOUNT>
-      Parameters:
-        --token     -m : ERC20 token (e.g. DAI 0x...)
-        --address   -a : Ethereum wallet address
-        --whale     -w : the whale address to grab tokens from
-        --amount    -q : quantity of tokens to send to the desired wallet
-    `);
-  }
+//   if (!parametersAreOk) {
+//     console.log(`
+//       Missing mandatory parameter!
+//       Usage:
+//         yarn fund-wallet --token <TOKEN ADDRESS> --wallet <WALLET ADDRESS> --amount <AMOUNT>
+//       Parameters:
+//         --token     -m : ERC20 token (e.g. DAI 0x...)
+//         --address   -a : Ethereum wallet address
+//         --whale     -w : the whale address to grab tokens from
+//         --amount    -q : quantity of tokens to send to the desired wallet
+//     `);
+//   }
 
-  const parameters = {};
+//   const parameters = {};
 
-  MANDATORY_PARAMETERS.forEach((param) => {
-    const [name, [long, short]] = param;
-    parameters[name] = argv[long] || argv[short];
-  });
+//   MANDATORY_PARAMETERS.forEach((param) => {
+//     const [name, [long, short]] = param;
+//     parameters[name] = argv[long] || argv[short];
+//   });
 // TOKEN AND WHALE NOT BEING PARSED PROPERLY SO HAVE TO HARD CODE
-  const token = '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2';
-  const address = parameters.address;
+  const token = '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9';
+  const address = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8' 
+  //parameters.address; 
   const whale = '0x6555e1CC97d3cbA6eAddebBCD7Ca51d75771e0B8';
-  const amount = parameters.amount;
+  const amount = '100'
 
   const tokenInstance = await ethers.getContractAt(
     ERC20_ABI,
@@ -72,6 +73,12 @@ async function main() {
     to: address,
     value: ethers.utils.parseEther("1.0"),
   });
+
+  const balance = (await tokenInstance.balanceOf(address))
+  console.log('new balance', ethers.utils.formatEther(balance));
+  
+
+
 }
 
 main()

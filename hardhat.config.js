@@ -1,5 +1,6 @@
 require("dotenv").config();
 require("@nomiclabs/hardhat-etherscan");
+require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-waffle");
 require("hardhat-gas-reporter");
 require("hardhat-deploy");
@@ -46,6 +47,7 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
+        chainId: 31337,
         url: "https://eth-mainnet.alchemyapi.io/v2/tOMgvfIYs5g8k6rvMVVjZEEsxT6MSMoa",
         blockNumber: 13072475,
         accounts:
