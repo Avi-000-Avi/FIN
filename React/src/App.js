@@ -7,30 +7,6 @@ import MintPage from "./components/MintPage"
 
 //STYLING
 
-import {
-  Container,
-  Flex,
-  VStack,
-  Heading,
-  Text,
-  SimpleGrid,
-  GridItem,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Checkbox,
-  HStack,
-  Image,
-  AspectRatio,
-  Divider,
-  Stack,
-  Button,
-  useColorMode,
-  useColorModeValue,
-  Box,
-  FormHelperText,
-} from "@chakra-ui/react";
 import { FcCandleSticks } from "react-icons/fc";
 
 

@@ -6,12 +6,12 @@ import { MintFormContext } from '../contexts/MintFormContext';
 
 export default function TradingViewComponent(props) {
 
-  const {} =useContext(MintFormContext)
+  const {tokenSymbols} =useContext(MintFormContext)
 
 
     return (
         <TradingViewWidget
-        symbol={'ETHUSD'}
+        symbol={`${tokenSymbols.holdToken}${tokenSymbols.collateralToken}`}
         theme={Themes.LIGHT}
         locale="eng"
         width={'650'}
