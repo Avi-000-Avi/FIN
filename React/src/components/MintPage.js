@@ -1,18 +1,17 @@
 import React,{useContext} from 'react'
 import { ContractContext } from '../contexts/ContractContext';
-import MintPageNavbar from './Navbar/MintPageNavbar'
+import { MintFormContext } from '../contexts/MintFormContext';
+import Details from './Details';
+import TradingViewComponent from './TradingViewComponent';
 
 
 
 export default function MintPage() {
 
-
-
-    const {contract} = useContext(ContractContext);
-
     return (
         <div>
-            <MintPageNavbar/>
+            <Details />
+            <TradingViewComponent />
         </div>
     )
 }

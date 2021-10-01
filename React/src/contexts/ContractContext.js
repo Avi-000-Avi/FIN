@@ -1,78 +1,47 @@
-import React, {createContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useMoralis,useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis"
-import {abi} from '../abi/abi'
-
-const CONTRACT_ADDRESS = '0xCD8a1C3ba11CF5ECfa6267617243239504a98d90' //deploy to hardhat after compile then add contractaddress here
-const contractAbi = abi.abi //exported abi for now
-
-
-
+import React, { createContext, useState } from "react";
+import { abi } from "../abi/abi";
+import { web3 } from "web3";
+import { ethers, BigNumber } from "ethers";
 
 export const ContractContext = createContext();
 
 export function ContractProvider(props) {
+  const contractAddress = "0x82e01223d51eb87e16a03e24687edf0f294da6f1";
+  const ABI = abi.abi;
+  const ALCHEMY = "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F";
 
-    const [contract, setContract] = useState()
+  const [stateUserAddress, setstateUserAddress] = useState('')
+  const [signedContract, setSignedContract] = useState()
+  const [signer, setSigner] = useState()
 
-    const options = {
-        chain: "hardhat",
-<<<<<<< HEAD
-        address: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
-=======
-        address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
->>>>>>> Avinash
-      };
+  let provider;
+  let userAddress;
 
-const {authenticate, logout,isInitialized, isAuthenticated,authError, hasAuthError,user, enableWeb3,isAuthenticating, isWeb3Enabled, Moralis, web3} = useMoralis()
+  const connect = async () => {
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    //  provider = new ethers.providers.JsonRpcProvider();
+    await provider.send("eth_requestAccounts", [0]);
+    let signer = provider.getSigner();
 
-<<<<<<< HEAD
-const Web3Api = useMoralisWeb3Api()
+    const contract = new ethers.Contract(contractAddress, ABI, provider);
 
-useEffect(()=>{
-=======
-const Web3API = useMoralisWeb3Api();
+    let signedContract = contract.connect(signer);
 
+    userAddress = await signer.getAddress();
 
+    setSignedContract(signedContract)
 
-useEffect( ()=>{
->>>>>>> Avinash
+    setstateUserAddress(userAddress)
 
-    if (isInitialized) {
-        enableWeb3();
-        setContract(new web3.eth.Contract(contractAbi, CONTRACT_ADDRESS))
+    setSigner(signer)
 
-<<<<<<< HEAD
-        Web3Api.account.getTransactions();
-=======
-        const getPrice = async () => {
-          try{
-            const transactions = await Web3API.account.getTokenBalances({address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", chain:'hardhat'})
-            console.log(transactions)
-          }catch(e){
-            console.log(e)
-          }
-          
-        }
-        
-        getPrice();
-        
-        
-        
->>>>>>> Avinash
-      }
-    }, [isInitialized, Moralis]);
+    console.log('success', signer, signedContract, userAddress)
 
-    if (!isInitialized) {
-        return null;
-      }
+  };
 
-    return (
-        <ContractContext.Provider value={{contract}}>
-
-            {props.children}
-
-        </ContractContext.Provider>
-    )
+  return (
+    <ContractContext.Provider value={{connect, stateUserAddress, signedContract, signer}}>
+      {props.children}
+    </ContractContext.Provider>
+  );
 }
-

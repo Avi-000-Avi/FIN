@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState, useContext } from "react";
 import {
     FormControl,
     FormLabel,
@@ -14,19 +13,20 @@ import {
     Checkbox,
     Button,Flex,NumberInput,NumberInputField,NumberIncrementStepper,NumberDecrementStepper,NumberInputStepper,Slider,SliderTrack,SliderThumb,SliderFilledTrack
   } from '@chakra-ui/react';
+
+  import { ContractContext } from "../contexts/ContractContext";
+  import { MintFormContext } from "../contexts/MintFormContext";
   
   import useTokenList from "../hook/useTokenList";
 import { id } from "@ethersproject/hash";
+import MintFunction from "./MintFunction";
 
   const Details = (props) => {
 
   const tokenList = useTokenList("https://gateway.ipfs.io/ipns/tokens.uniswap.org");
   
-  const [input, setInput] = useState(0)
-  const [collateral, setCollateral] = useState(0)
-
-  const handleInputChange = (input) => setInput(input)
-  const handleCollateralChange = (collateral) => setCollateral(collateral)
+  const {connect, stateUserAddress, signedContract} = useContext(ContractContext);
+  const {mintForm,changeHoldToken,changeCollateralToken, changeAmount, changeStopLoss, changeTakeProfit } = useContext(MintFormContext);
   
   
   return (
@@ -40,25 +40,19 @@ import { id } from "@ethersproject/hash";
         <GridItem colSpan={2}>
           <Flex spacing={30}>
           <GridItem colSpan={1}>
-            <Select >{
+            <Select onChange={changeHoldToken} >{
             tokenList.map((token,id) =>
-            <option key={id}>{token.symbol}</option>
+            <option value={id} key={id}>{token.symbol}</option>
             )}
             </Select>
           </GridItem>
-          <NumberInput maxW="100px" mr="2rem" value={input} onChange={handleInputChange}>
+          <NumberInput maxW="100px" mr="2rem" value={mintForm.amount} onChange={changeAmount}>
         <NumberInputField />
         <NumberInputStepper>
           <NumberIncrementStepper />
           <NumberDecrementStepper />
         </NumberInputStepper>
       </NumberInput>
-      <Slider flex="1" focusThumbOnChange={false} value={input} onChange={handleInputChange}>
-        <SliderTrack>
-          <SliderFilledTrack />
-        </SliderTrack>
-        <SliderThumb fontSize="sm" boxSize="32px" children={input} />
-      </Slider>
           </Flex>
           </GridItem>
 
@@ -68,43 +62,21 @@ import { id } from "@ethersproject/hash";
           <GridItem colSpan={2}>
           <Flex spacing={30}>
           <GridItem colSpan={1}>
-            <Select>{
+            <Select onChange={changeCollateralToken}>{
             tokenList.map((token,id) =>
-            <option key={id}>{token.symbol}</option>
+            <option value= {id}key={id}>{token.symbol}</option>
             )}
             </Select>
           </GridItem>
-          <NumberInput maxW="100px" mr="2rem" value={collateral} onChange={handleCollateralChange}>
-        <NumberInputField />
-        <NumberInputStepper>
-          <NumberIncrementStepper />
-          <NumberDecrementStepper />
-        </NumberInputStepper>
-      </NumberInput>
-      <Slider flex="1" focusThumbOnChange={false} value={collateral} onChange={handleCollateralChange}>
-        <SliderTrack>
-          <SliderFilledTrack />
-        </SliderTrack>
-        <SliderThumb fontSize="sm" boxSize="32px" children={collateral} />
-      </Slider>
           </Flex>
           </GridItem>
           
-          
-          
-
-          
+        <Button onClick={connect}> Connect </Button>
           <GridItem colSpan={2}>
-            <Button size="lg" w="full">
-              Make a swap
-            </Button>
+            <MintFunction/>
           </GridItem>
 <GridItem>
-<FormControl  onChange={props.setMintForm} id="email">
-        <FormLabel>Email address</FormLabel>
-        <Input type="text" value={props.mintForm.holdToken} />
-        <FormHelperText>We'll never share your email.</FormHelperText>
-      </FormControl>
+
 </GridItem>
 
         </SimpleGrid>
