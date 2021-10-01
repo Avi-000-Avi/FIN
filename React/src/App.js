@@ -43,7 +43,8 @@ import { Moralis } from "moralis";
 import Details from "./components/Details";
 import useInputState from "./hook/useInputState";
 
-const contractAddress = "0x7969c5eD335650692Bc04293B07F5BF2e7A673C0";
+
+const contractAddress = "0x82e01223d51Eb87e16A03E24687EDF0F294da6f1";
 const ABI = abi.abi;
 const ALCHEMY =
   "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F";
@@ -130,7 +131,9 @@ let signedContract
 
   const connect = async () => {
      //provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-     provider = new ethers.providers.JsonRpcProvider();
+     //provider = new ethers.providers.JsonRpcProvider();
+     provider = new ethers.providers.Web3Provider(window.ethereum)
+
       // Prompt user for account connections
       // await provider.send("eth_requestAccounts", [0]);
       signer = provider.getSigner();
@@ -270,7 +273,6 @@ console.log("Account:", await signer.getAddress());
           <TradingViewComponent pairs={pairs} />
         </Suspense>
       </Flex>
-
     </Container>
   );
 }

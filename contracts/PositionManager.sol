@@ -53,35 +53,6 @@ contract PositionManager is ERC721Burnable, IPositionManager, Ownable {
         return results;
     }
 
-    function mint(address holdToken, uint256 amount, uint256 stopLoss, uint256 takeProfit) external override returns(uint256 tokenId) {
-        IERC20 token = IERC20(holdToken);
-
-        require(token.allowance(msg.sender, address(this)) >= amount, "Allowance error");
-        require(token.balanceOf(msg.sender) >= amount, "Balance error");
-        token.safeTransferFrom(msg.sender, address(this), amount);
-
-        _tokenIds.increment();
-        tokenId = _tokenIds.current();
-
-        Position memory position = Position({
-            id: tokenId,
-            owner: msg.sender,
-            amount: amount,
-            takeProfit: takeProfit,
-            stopLoss: stopLoss,
-            holdToken: holdToken,
-            collateralToken: address(0),
-            createdAt: block.timestamp
-        });
-
-        _mint(msg.sender, tokenId);
-        positions[tokenId] = position;
-        userPositionsCounter[msg.sender]++;
-
-        emit PositionWasOpened(position);
-    }
-
-/*
     function mint(address holdToken, address collateralToken, uint256 amount, bool swapOnMint, uint256 stopLoss, uint256 takeProfit) external override returns(uint256 tokenId) {
         IERC20 token;
         if(swapOnMint)
@@ -122,7 +93,6 @@ contract PositionManager is ERC721Burnable, IPositionManager, Ownable {
 
         emit PositionWasOpened(position);
     }
-*/
 
     // slither-disable-next-line external-function
     function burn(uint256 tokenId, bool swapOnBurn) external override {

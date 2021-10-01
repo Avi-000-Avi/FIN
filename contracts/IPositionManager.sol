@@ -16,8 +16,7 @@ interface IPositionManager is IERC721Metadata {
         uint256 createdAt;
     }
 
-    //function mint(address holdToken, address collateralToken, uint256 amount, bool swapOnMint, uint256 stopLoss, uint256 takeProfit) external returns(uint256 tokenId);
-    function mint(address holdToken, uint256 amount, uint256 stopLoss, uint256 takeProfit) external returns(uint256 tokenId);
+    function mint(address holdToken, address collateralToken, uint256 amount, bool swapOnMint, uint256 stopLoss, uint256 takeProfit) external returns(uint256 tokenId);
     function burn(uint256 tokenId, bool swapOnBurn) external;
     function getPosition(uint256 tokenId) external view returns(Position memory);
     function getOwnedPositions() external view returns(uint256[] memory);
