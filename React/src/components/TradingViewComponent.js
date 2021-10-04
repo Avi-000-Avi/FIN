@@ -1,7 +1,7 @@
 import React,{useContext} from 'react'
 import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 import { MintFormContext } from '../contexts/MintFormContext';
- 
+ import { Box } from '@chakra-ui/layout';
 
 
 export default function TradingViewComponent(props) {
@@ -10,12 +10,17 @@ export default function TradingViewComponent(props) {
 
 
     return (
+      <Box >
         <TradingViewWidget
         symbol={`${tokenSymbols.holdToken}${tokenSymbols.collateralToken}`}
-        theme={Themes.LIGHT}
+        theme={Themes.DARK}
         locale="eng"
         width={'650'}
         height={'500'}
+        
       />
+      </Box>
     )
 }
+
+
