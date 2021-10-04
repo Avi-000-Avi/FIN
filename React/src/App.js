@@ -4,6 +4,7 @@ import { MintFormProvider } from "./contexts/MintFormContext";
 import { ContractProvider } from "./contexts/ContractContext";
 import Landing from "./components/Landing"
 import MintPage from "./components/MintPage"
+import MintPageExample from "./components/Navbar/MintPageExample";
 
 //STYLING
 
@@ -20,7 +21,7 @@ function App() {
       <MintFormProvider>
 
       <Route exact path='/' component={Landing}/>
-      <Route exact path='/app' component={MintPage}/>
+      <Route exact path='/app' component={MintPageExample}/>
 
       </MintFormProvider>
     </ContractProvider>

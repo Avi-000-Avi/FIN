@@ -22,7 +22,10 @@ import {
   SliderTrack,
   SliderThumb,
   SliderFilledTrack,
+  Box,
+  Image
 } from "@chakra-ui/react";
+import axios from "axios";
 
 import { ContractContext } from "../contexts/ContractContext";
 import { MintFormContext } from "../contexts/MintFormContext";
@@ -30,6 +33,7 @@ import { MintFormContext } from "../contexts/MintFormContext";
 import useTokenList from "../hook/useTokenList";
 import { id } from "@ethersproject/hash";
 import MintFunction from "./MintFunction";
+import DexPrice from "./DexPrice";
 
 const Details = (props) => {
   const tokenList = useTokenList(
@@ -48,16 +52,34 @@ const Details = (props) => {
     toggleSwapOnMint
   } = useContext(MintFormContext);
 
+  const [holdcoinImage, setholdcoinImage] = useState('')
+  const [collateralcoinImage, setcollateralcoinImage] = useState('')
+  
+
+  const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
+  .then(res => setholdcoinImage(res.data.image.thumb))
+
+  const grabcollateralCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
+  .then(res => setcollateralcoinImage(res.data.image.thumb))
+
+
   return (
-    <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start">
-      <VStack spacing={3} alignItems="flex-start">
-        <Heading size="2xl">Mint details</Heading>
-      </VStack>
+    <Box marginLeft={'800px'} paddingTop={'200px'} textColor='#4FD1C5'>
+    <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start" > 
+
       <Text>Set Your Deposit Token</Text>
 
+      <DexPrice />
+
       <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
+
+    
         <GridItem colSpan={2}>
           <Flex spacing={30}>
+
+          <GridItem colSpan={1}>
+              <Image src={holdcoinImage}/>
+            </GridItem>
             <GridItem colSpan={1}>
               <Select onChange={changeHoldToken}>
                 {tokenList.map((token, id) => (
@@ -68,15 +90,18 @@ const Details = (props) => {
               </Select>
             </GridItem>
 
+            
+
             <NumberInput
               onChange={changeAmount}
-              maxW="100px"
+              maxW="50px"
+              paddingLeft='1rem'
               mr="2rem"
               defaultValue={0}
               min={0}
             >
               <NumberInputField value={mintForm.amount} />
-              <NumberInputStepper>
+              <NumberInputStepper >
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
               </NumberInputStepper>
@@ -88,6 +113,10 @@ const Details = (props) => {
 
         <GridItem colSpan={2}>
           <Flex spacing={30}>
+
+          <GridItem colSpan={1}>
+          <Image src={collateralcoinImage}/>
+            </GridItem>
             <GridItem colSpan={1}>
               <Select onChange={changeCollateralToken}>
                 {tokenList.map((token, id) => (
@@ -105,7 +134,7 @@ const Details = (props) => {
               min={0}
             >
               <NumberInputField value={mintForm.stopLoss} />
-              <NumberInputStepper>
+              <NumberInputStepper ml="2rem">
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
               </NumberInputStepper>
@@ -125,7 +154,7 @@ const Details = (props) => {
               </NumberInputStepper>
             </NumberInput>
 
-            <Checkbox value={mintForm.swapOnMint} onChange={toggleSwapOnMint} >Swap On Mint?</Checkbox>
+            <Checkbox iconColor="blue" iconSize="1rem" value={mintForm.swapOnMint} onChange={toggleSwapOnMint}> Swap On Mint ?</Checkbox>
 
             </GridItem>
           </Flex>
@@ -137,6 +166,7 @@ const Details = (props) => {
         <GridItem></GridItem>
       </SimpleGrid>
     </VStack>
+    </Box>
   );
 };
 
