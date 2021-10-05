@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import "@uniswap/v3-periphery/contracts/interfaces/IQuoterV2.sol";
 import "./IPositionManager.sol";
 import "hardhat/console.sol";
 
@@ -16,6 +17,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
     using SafeERC20 for IERC20;
 
     ISwapRouter internal constant ROUTER = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
+    IQuoterV2 internal constant QUOTER = IQuoterV2(0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6);
     uint8 public feeRate;
     mapping(address => uint256) private collectedFees;
     mapping(uint256 => Position) private positions;
@@ -53,7 +55,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
     }
 
     function mint(PositionParams calldata params) external override returns(uint256 tokenId) {
-        IERC20 token = IERC20(params.holdToken);
+        IERC20 token = IERC20(params.fromToken);
 
         require(token.allowance(msg.sender, address(this)) >= params.amount, "Allowance error");
         require(token.balanceOf(msg.sender) >= params.amount, "Balance error");
@@ -61,7 +63,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
 
         // collect fees
         uint256 fee = params.amount * feeRate / 100;
-        collectedFees[address(params.holdToken)] += fee;
+        collectedFees[address(params.fromToken)] += fee;
         uint256 newAmount = params.amount - fee;
 
         _tokenIds.increment();
@@ -74,8 +76,9 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
             amountOut: 0,
             takeProfit: params.takeProfit,
             stopLoss: params.stopLoss,
-            holdToken: params.holdToken,
-            collateralToken: params.collateralToken,
+            fromToken: params.fromToken,
+            toToken: params.toToken,
+            maxGasPrice: params.maxGasPrice,
             createdAt: block.timestamp
         });
 
@@ -98,15 +101,15 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         require(_isApprovedOrOwner(msg.sender, tokenId), "Not the owner");
 
         Position memory position = positions[tokenId];
-        IERC20 holdToken = IERC20(position.holdToken);
+        IERC20 fromToken = IERC20(position.fromToken);
 
-        require(holdToken.allowance(msg.sender, address(this)) >= amount, "Allowance error");
-        require(holdToken.balanceOf(msg.sender) >= amount, "Balance error");
+        require(fromToken.allowance(msg.sender, address(this)) >= amount, "Allowance error");
+        require(fromToken.balanceOf(msg.sender) >= amount, "Balance error");
 
         position.amount += amount;
         positions[tokenId] = position;
 
-        holdToken.safeTransferFrom(msg.sender, address(this), amount);
+        fromToken.safeTransferFrom(msg.sender, address(this), amount);
 
         emit PositionWasUpdated(position);
     }
@@ -120,7 +123,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         position.amount -= amount;
         positions[tokenId] = position;
 
-        IERC20 token = IERC20(position.holdToken);
+        IERC20 token = IERC20(position.fromToken);
         token.safeTransfer(position.owner, amount);
 
         emit PositionWasUpdated(position);
@@ -132,19 +135,13 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         delete positions[tokenId];
         userPositionsCounter[msg.sender]--;
 
-        IERC20 token = IERC20(position.holdToken);
+        IERC20 token = IERC20(position.fromToken);
         if(token.allowance(address(this), address(ROUTER)) < position.amount)
             token.safeApprove(address(ROUTER), type(uint256).max);
-        
-
-        console.log(position.holdToken);
-        console.log(position.collateralToken);
-        console.log(position.owner);
-        console.log(position.amount);
 
         ISwapRouter.ExactInputSingleParams memory swapParams = ISwapRouter.ExactInputSingleParams({
-            tokenIn: position.holdToken,
-            tokenOut: position.collateralToken,
+            tokenIn: position.fromToken,
+            tokenOut: position.toToken,
             fee: 500, // TODO fixme
             recipient: position.owner,
             deadline: block.timestamp + 15,
@@ -157,41 +154,43 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         emit PositionWasClosed(position);
     }
 
-    /*
-    function checker() external view returns (bool canExec, bytes memory execPayload) {
+    function checkUpkeep(bytes calldata /*checkData*/) external override returns (bool upkeepNeeded, bytes memory performData) {
         uint256[] memory results = new uint256[](_tokenIds.current());
         uint256 counter = 0;
-        uint256 price;
 
-        // for each NFT
         for (uint256 i = 0; i < _tokenIds.current(); i++) {
-            if(positions[i].owner != address(0) && positions[i].maxGasPrice <= tx.gasprice) {
-                (price, ) = oracleQuoter.getExpectedReturn(IERC20(positions[i].fromToken), IERC20(positions[i].toToken), positions[i].fromTokenAmount, 10, 0);
+            if(positions[i].owner != address(0)) {
+                Position memory position = positions[i];
 
-                if(price <= positions[i].stopLoss || price >= positions[i].takeProfit) {
-                    results[counter] = i;
+                IQuoterV2.QuoteExactInputSingleParams memory quoterParams = IQuoterV2.QuoteExactInputSingleParams({
+                    tokenIn: position.fromToken,
+                    tokenOut: position.toToken,
+                    amountIn: position.amount,
+                    fee: 500, // TODO fix me
+                    sqrtPriceLimitX96: 0
+                });
+                (uint256 amountOut, , ,uint256 gasEstimate) = QUOTER.quoteExactInputSingle(quoterParams);
+
+                if(gasEstimate <= position.maxGasPrice && ( position.stopLoss <= amountOut || amountOut > position.takeProfit)) {
+                    results[counter++] = i;
                 }
             }
         }
 
         if(results.length != 0) {
-            canExec = true;
-            execPayload = abi.encode(results);
+            upkeepNeeded = true;
+            performData = abi.encode(results);
         }
     }
 
-    function execute(bytes calldata execPayload) external {
-        uint256[] memory positionIDs = abi.decode(execPayload, (uint256[]));
-        uint256 id;
-        uint256 price;
+    function performUpkeep(bytes calldata performData) external override {
+        uint256[] memory positionIDs = abi.decode(performData, (uint256[]));
 
         for (uint256 i = 0; i < positionIDs.length; i++) {
-            id = positionIDs[i];
-
-            if(positions[id].owner != address(0)) {
-                
+            if(positions[i].owner != address(0)) {
+                _exit(i);
             }
         }
     }
-    */
+
 }

@@ -7,9 +7,9 @@ describe("PositionManager tests", function () {
 
   // PARAMETERS
   const DEBUG = true;
-  const holdToken = TOKENS.sushi;
-  const collateralToken = TOKENS.dai;
-  const amount = ethers.utils.parseUnits(holdToken["amount"], holdToken["decimals"]);
+  const fromToken = TOKENS.sushi;
+  const toToken = TOKENS.dai;
+  const amount = ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"]);
 
   async function getTokenBalance(token, user) {
     const contract = await ethers.getContractAt(
@@ -63,24 +63,25 @@ describe("PositionManager tests", function () {
     ]);
   }
 
-  it(("Should mint and burn a NFT on the couple " + holdToken["symbol"] + " - " + collateralToken["symbol"]), async function () {
+  it(("Should mint and burn a NFT on the couple " + fromToken["symbol"] + " - " + toToken["symbol"]), async function () {
     const { positionManager, user } = await setup();
     
-    await fundUserAndApproveAddress(user, holdToken, positionManager.address);
-    const initialBalance = await getTokenBalance(holdToken["address"], user.address);
+    await fundUserAndApproveAddress(user, fromToken, positionManager.address);
+    const initialBalance = await getTokenBalance(fromToken["address"], user.address);
 
     if(DEBUG) console.log("Minting...");
     const mintTx = await positionManager.connect(user).mint({
-      holdToken: holdToken["address"],
-      collateralToken: collateralToken["address"],
+      fromToken: fromToken["address"],
+      toToken: toToken["address"],
       amount: amount,
       takeProfit: 0,
       stopLoss: 10,
+      maxGasPrice: 10000
     });
     if(DEBUG) console.log("OK");
 
-    const finalBalance = await getTokenBalance(holdToken["address"], user.address);
-    assert(initialBalance.sub(finalBalance).eq(amount), "holdToken balance error");
+    const finalBalance = await getTokenBalance(fromToken["address"], user.address);
+    assert(initialBalance.sub(finalBalance).eq(amount), "fromToken balance error");
 
     const tx = await mintTx.wait();
     const id = tx.events.find((e) => e.event == 'PositionWasOpened').args[0].id;
@@ -93,7 +94,7 @@ describe("PositionManager tests", function () {
     const positions = await positionManager.connect(user).getOwnedPositions();
     assert(positions.length == 0, "NFT burning error");
 
-    const fees = await getTokenBalance(holdToken["address"], positionManager.address);
+    const fees = await getTokenBalance(fromToken["address"], positionManager.address);
     assert(fees.eq(amount.mul(1).div(100)), "No fees collected");
   });
 });

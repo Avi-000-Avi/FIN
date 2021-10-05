@@ -3,29 +3,32 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+import "./IKeeperInterface.sol";
 
-interface IPositionManager is IERC721Metadata {
+interface IPositionManager is IERC721Metadata, IKeeperInterface {
     struct Position {
         uint256 id;
         address owner;
-        address holdToken;
-        address collateralToken;
+        address fromToken;
+        address toToken;
         uint256 amount;
         uint256 amountOut;
         uint256 takeProfit;
         uint256 stopLoss;
+        uint256 maxGasPrice;
         uint256 createdAt;
     }
 
     struct PositionParams {
-        address holdToken;
-        address collateralToken;
+        address fromToken;
+        address toToken;
         uint256 amount;
         uint256 takeProfit;
         uint256 stopLoss;
+        uint256 maxGasPrice;
     }
 
-    //function mint(address holdToken, address collateralToken, uint256 amount, bool swapOnMint, uint256 stopLoss, uint256 takeProfit) external returns(uint256 tokenId);
+    //function mint(address fromToken, address toToken, uint256 amount, bool swapOnMint, uint256 stopLoss, uint256 takeProfit) external returns(uint256 tokenId);
     function mint(PositionParams calldata params) external returns(uint256 tokenId);
     function burn(uint256 tokenId) external;
     function deposit(uint256 tokenId, uint256 amount) external;
