@@ -1,8 +1,5 @@
 import React, {createContext, useEffect, useState } from "react";
-
-
 export const MintFormContext = createContext();
-
 export function MintFormProvider(props) {
 
 
@@ -25,9 +22,9 @@ export function MintFormProvider(props) {
     const holdTokenSymbol = token[1]
 
     const contractAddress = token[0]
-  setMintForm({...mintForm, holdToken: contractAddress})
+    setMintForm({...mintForm, holdToken: contractAddress})
 
-  setTokenSymbols({...tokenSymbols, holdToken:holdTokenSymbol})
+    setTokenSymbols({...tokenSymbols, holdToken:holdTokenSymbol})
   } 
 
   const changeCollateralToken = (val) => {

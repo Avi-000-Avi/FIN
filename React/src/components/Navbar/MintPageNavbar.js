@@ -24,8 +24,10 @@ export default function MintPageNavbar(props) {
     return (
 <Flex textColor='#4FD1C5'>
   <Box p="2">
-    <Heading size="sm"> Financially Intelligent Token</Heading>
+    <Heading size="sm"> Financially Intelligent NFT</Heading>
   </Box>
+
+
   <Spacer />
   <Box>
 

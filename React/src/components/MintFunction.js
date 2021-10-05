@@ -51,8 +51,8 @@ export default function MintFunction() {
 
      const positions = await signedContract.getOwnedPositions()
 
-      const res = ethers.BigNumber.from(positions[0])
-     console.log(res)
+      
+     console.log(positions)
   }
 
   return (

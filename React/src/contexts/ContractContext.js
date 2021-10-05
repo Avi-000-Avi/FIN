@@ -6,7 +6,7 @@ import { ethers, BigNumber } from "ethers";
 export const ContractContext = createContext();
 
 export function ContractProvider(props) {
-  const contractAddress = "0x1fA02b2d6A771842690194Cf62D91bdd92BfE28d";
+  const contractAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90";
   const ABI = abi.abi;
   const ALCHEMY = "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F";
 
@@ -14,6 +14,7 @@ export function ContractProvider(props) {
   const [signedContract, setSignedContract] = useState()
   const [signer, setSigner] = useState()
   const [provider, setProvider] = useState()
+  
 
   
 

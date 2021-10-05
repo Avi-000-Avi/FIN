@@ -52,15 +52,29 @@ const Details = (props) => {
     toggleSwapOnMint
   } = useContext(MintFormContext);
 
-  const [holdcoinImage, setholdcoinImage] = useState('')
-  const [collateralcoinImage, setcollateralcoinImage] = useState('')
+  const [holdcoinImage, setholdcoinImage] = useState("https://assets.coingecko.com/coins/images/12504/thumb/uniswap-uni.png?1600306604")
+  const [collateralcoinImage, setcollateralcoinImage] = useState("https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880")
   
+  useEffect(()=>{
 
-  const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
+    const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
   .then(res => setholdcoinImage(res.data.image.thumb))
+
+
+  },[mintForm.holdToken])
+
+  useEffect(()=>{
 
   const grabcollateralCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
   .then(res => setcollateralcoinImage(res.data.image.thumb))
+
+  },[ mintForm.collateralToken])
+
+
+
+  
+
+  
 
 
   return (
@@ -82,6 +96,11 @@ const Details = (props) => {
             </GridItem>
             <GridItem colSpan={1}>
               <Select onChange={changeHoldToken}>
+
+              <option value={['0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984','UNI']}>
+                    {"UNI"}
+                  </option>
+
                 {tokenList.map((token, id) => (
                   <option value={[token.address,token.symbol]} key={id}>
                     {token.symbol}
@@ -119,26 +138,22 @@ const Details = (props) => {
             </GridItem>
             <GridItem colSpan={1}>
               <Select onChange={changeCollateralToken}>
+
+              <option value={['0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE','ETH']}>
+                    {"ETH"}
+                  </option>
+
                 {tokenList.map((token, id) => (
                   <option value={[token.address,token.symbol]} key={id}>
                     {token.symbol}
                   </option>
                 ))}
+           
               </Select>
 
-              <NumberInput
-              onChange={changeStopLoss}
-              maxW="50px"
-              mr="2rem"
-              defaultValue={0}
-              min={0}
-            >
-              <NumberInputField value={mintForm.stopLoss} />
-              <NumberInputStepper ml="2rem">
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+
+
+            <Text>Max Price</Text>
 
             <NumberInput
               onChange={changeTakeProfit}
@@ -154,7 +169,21 @@ const Details = (props) => {
               </NumberInputStepper>
             </NumberInput>
 
-            <Checkbox iconColor="blue" iconSize="1rem" value={mintForm.swapOnMint} onChange={toggleSwapOnMint}> Swap On Mint ?</Checkbox>
+            <Text>Min Price</Text>
+
+<NumberInput
+onChange={changeStopLoss}
+maxW="50px"
+mr="2rem"
+defaultValue={0}
+min={0}
+>
+<NumberInputField value={mintForm.stopLoss} />
+<NumberInputStepper ml="2rem">
+  <NumberIncrementStepper />
+  <NumberDecrementStepper />
+</NumberInputStepper>
+</NumberInput>
 
             </GridItem>
           </Flex>

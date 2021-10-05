@@ -1,24 +1,47 @@
-import React,{useContext, useState} from 'react'
+import React,{useContext, useState, useEffect} from 'react'
 import axios from 'axios';
 import { MintFormContext } from '../contexts/MintFormContext';
- import { Text } from '@chakra-ui/layout';
+import { Text } from '@chakra-ui/layout';
 
+const API = 'BRZgJuJfeIi0zdfPwx93Yff7SZfG35QLVYTT2DyusTQ'
 
-
-  
 
 export default function DexPrice() {
 
     const {tokenSymbols, mintForm} =useContext(MintFormContext)
 
-    const [price, setPrice] = useState('')
+    const [holdTokenPrice, setholdTokenPrice] = useState()
+    const [collateralTokenPrice, setcollateralTokenPrice] = useState()
 
-    const holdToken = axios.get(`https://api.0x.org/swap/v1/quote?buyToken=${tokenSymbols.holdToken}&sellToken=WETH&sellAmount=100000000000000000`)
-    .then(res => setPrice(res.data.price))
+    
+    
+
+    useEffect(()=>{
+
+
+     axios.get(`https://api.dev.dex.guru/v1/chain/1/tokens/${mintForm.holdToken}/market?api-key=BRZgJuJfeIi0zdfPwx93Yff7SZfG35QLVYTT2DyusTQ`)
+    .then(res => {
+        setholdTokenPrice(res.data.price_usd)
+        return res
+    })
+    
+    },[mintForm.holdToken])
+
+    useEffect(()=>{
+        const delay = () =>setTimeout(() => {
+            axios.get(`https://api.dev.dex.guru/v1/chain/1/tokens/${mintForm.collateralToken}/market?api-key=BRZgJuJfeIi0zdfPwx93Yff7SZfG35QLVYTT2DyusTQ`)
+        .then(res => setcollateralTokenPrice (res.data.price_usd))
+            }, 3000)
+    
+            delay()
+    },[])
+   
+
+
     
     return (
         <div>
-           <Text>DEX Price by 0x: {price}</Text> 
+           <Text>Onchain Price by DEX Guru: {holdTokenPrice}</Text> 
            <Text>{`${tokenSymbols.holdToken}/ETH`}</Text> 
         </div>
     )
