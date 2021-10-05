@@ -42,7 +42,6 @@ export default function DexPrice() {
     return (
         <div>
            <Text>Onchain Price by DEX Guru: {holdTokenPrice}</Text> 
-           <Text>{`${tokenSymbols.holdToken}/ETH`}</Text> 
         </div>
     )
 }

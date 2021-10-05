@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import "./MintPage.css";
 
 // STYLING AND ASSETS
@@ -9,6 +9,7 @@ import { SimpleGrid, Button, } from "@chakra-ui/react";
 import { Container, Box } from "@chakra-ui/layout";
 import { Popover, PopoverTrigger, PopoverContent} from "@chakra-ui/popover";
 import FocusLock from "@chakra-ui/focus-lock";
+import { Text } from "@chakra-ui/layout";
 
 import Details from "../Details";
 import MintPageNavbar from "./MintPageNavbar";
@@ -30,19 +31,19 @@ export default function MintPageExample(props) {
                 <Details />
               </Box>
 
-              <Box>
+              <Box >
               <Popover
+              isLazy
               initialFocusRef={firstFieldRef}
         returnFocusOnClose={false}
         isOpen={isOpen}
         onClose={close}
-        placement="right"
         closeOnBlur={false}
       >
-        <PopoverTrigger>
-          <div></div>
+        <PopoverTrigger >
+          <Fragment > <Text >{''}</Text> </Fragment>
         </PopoverTrigger>
-        <PopoverContent zIndex={99} p={5}>
+        <PopoverContent bg="blue.800" borderColor="blue.800" zIndex={99} p={0} top={'250px'} left={'150px'} >
           <FocusLock returnFocus persistentFocus={false}>
             <TradingViewComponent firstFieldRef={firstFieldRef} />
           </FocusLock>
@@ -56,10 +57,10 @@ export default function MintPageExample(props) {
 
               <img className="hero-bg" src={heroBg} />
 
-              <Button mr={5} onClick={open} zIndex={99}>
-                <img className="group-33937" src={group33937} />
+              <Button mr={5} width={'80px'} onClick={open} zIndex={99}>
+                <img  className="group-33937" src={group33937} />
               </Button>
-              <img className="rectangle-141" src={rectangle141} />
+             
 
               
             </div>
