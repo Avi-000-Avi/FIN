@@ -31,12 +31,12 @@ import { ContractContext } from "../contexts/ContractContext";
 import { MintFormContext } from "../contexts/MintFormContext";
 
 import useTokenList from "../hook/useTokenList";
-import { id } from "@ethersproject/hash";
 import MintFunction from "./MintFunction";
 import DexPrice from "./DexPrice";
-import BurnFunction from "./BurnFunction";
 
-const Details = (props) => {
+const MintFormDetails = (props) => {
+
+
   const tokenList = useTokenList(
     "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
   );
@@ -208,4 +208,4 @@ min={0}
   );
 };
 
-export default Details;
+export default MintFormDetails;

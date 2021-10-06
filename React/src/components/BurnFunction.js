@@ -13,16 +13,13 @@ export default function BurnFunction(props) {
         provider,
         contractAddress,
       } = useContext(ContractContext);
-
-      console.log(signedContract, tokenId)
     
     
       const burn = async () => {
-        // let mintTx = await signedContract.burn(
-        //     tokenId
-        // );
+        let mintTx = await signedContract.burn(
+            tokenId
+        );
 
-        console.log('hello')
       };
     
 

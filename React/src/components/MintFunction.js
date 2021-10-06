@@ -23,11 +23,14 @@ export default function MintFunction() {
     const amount = ethers.utils.parseUnits(mintForm.amount, 18);
 
     let mintTx = await signedContract.mint(
-      mintForm.holdToken,
-      amount,
-      mintForm.stopLoss,
-      mintForm.takeProfit
-    );
+      {
+        fromToken: mintForm.holdToken,
+        toToken: mintForm.collateralToken,
+        amount: amount,
+        takeProfit: mintForm.takeProfit,
+        stopLoss: mintForm.stopLoss,
+        maxGasPrice: 100000
+      })
   };
 
   const approve = async () => {

@@ -11,11 +11,14 @@ import { Popover, PopoverTrigger, PopoverContent} from "@chakra-ui/popover";
 import FocusLock from "@chakra-ui/focus-lock";
 import { Text } from "@chakra-ui/layout";
 
-import Details from "../MintFormDetails";
+import MintFormDetails from "../MintFormDetails";
 import MintPageNavbar from "../Navbar/MintPageNavbar";
 import TradingViewComponent from "../TradingViewComponent";
 
 export default function MintPageView(props) {
+
+
+
   const [isOpen, setIsOpen] = useState(false);
   const firstFieldRef = React.useRef(null);
   const open = () => setIsOpen(!isOpen);
@@ -28,7 +31,7 @@ export default function MintPageView(props) {
           <div className="mint-page">
             <SimpleGrid columns={1} pos="absolute" zIndex={99}>
               <Box>
-                <Details />
+                <MintFormDetails />
               </Box>
 
               <Box >
