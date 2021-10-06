@@ -1,9 +1,8 @@
 require("dotenv").config();
-
 require("@nomiclabs/hardhat-etherscan");
-require("@nomiclabs/hardhat-waffle");
-require("hardhat-gas-reporter");
+require("@nomiclabs/hardhat-ethers");
 require("hardhat-deploy");
+require("hardhat-gas-reporter");
 require("solidity-coverage");
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -35,14 +34,6 @@ module.exports = {
         },
       },
     ],
-  },
-  paths: {
-    artifacts: './artifacts',
-  },
-  namedAccounts: {
-    deployer: {
-      default: 0, // here this will by default take the first account as deployer
-    },
   },
   networks: {
     hardhat: {
@@ -78,5 +69,12 @@ module.exports = {
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  namedAccounts: {
+    deployer: {
+        default: 0, // here this will by default take the first account as deployer
+        1: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
+        "goerli": '0x84b9514E013710b9dD0811c9Fe46b837a4A0d8E0', //it can also specify a specific netwotk name (specified in hardhat.config.js)
+    }
   }
 };
