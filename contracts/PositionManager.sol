@@ -7,17 +7,21 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
+import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/IQuoterV2.sol";
 import "./IPositionManager.sol";
+import "./UniversalERC20.sol";
 import "hardhat/console.sol";
 
 contract PositionManager is ERC721, IPositionManager, Ownable {
     using Counters for Counters.Counter;
     using SafeERC20 for IERC20;
+    using UniversalERC20 for IERC20;
 
+    IUniswapV3Factory internal constant FACTORY = IUniswapV3Factory(0x1F98431c8aD98523631AE4a59f267346ea31F984);
     ISwapRouter internal constant ROUTER = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
-    IQuoterV2 internal constant QUOTER = IQuoterV2(0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6);
+    IQuoterV2 internal constant QUOTER = IQuoterV2(0x0209c4Dc18B2A1439fD2427E34E7cF3c6B91cFB9);
     uint8 public feeRate;
     mapping(address => uint256) private collectedFees;
     mapping(uint256 => Position) private positions;
@@ -60,6 +64,11 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         require(token.allowance(msg.sender, address(this)) >= params.amount, "Allowance error");
         require(token.balanceOf(msg.sender) >= params.amount, "Balance error");
         token.safeTransferFrom(msg.sender, address(this), params.amount);
+
+        address pool = FACTORY.getPool(params.fromToken, params.toToken, 500 /* TODO fix me*/);
+
+        require(pool != address(0), "No pool available");
+        require(IERC20(params.fromToken).universalBalanceOf(pool) > params.amount * 10, "Not enough liquidity");
 
         // collect fees
         uint256 fee = params.amount * feeRate / 100;
@@ -149,6 +158,9 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
             amountOutMinimum: 0, // TODO frontrun me please
             sqrtPriceLimitX96: 0
         });
+        // position.fromToken.isETH()
+        //     ? position.amountOut = ROUTER.exactInputSingle{value: position.amount}(swapParams)
+        //     : position.amountOut = ROUTER.exactInputSingle{value: 0}(swapParams);\
         position.amountOut = ROUTER.exactInputSingle(swapParams);
 
         emit PositionWasClosed(position);
