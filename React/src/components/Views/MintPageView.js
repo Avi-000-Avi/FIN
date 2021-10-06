@@ -11,11 +11,11 @@ import { Popover, PopoverTrigger, PopoverContent} from "@chakra-ui/popover";
 import FocusLock from "@chakra-ui/focus-lock";
 import { Text } from "@chakra-ui/layout";
 
-import Details from "../Details";
-import MintPageNavbar from "./MintPageNavbar";
+import Details from "../MintFormDetails";
+import MintPageNavbar from "../Navbar/MintPageNavbar";
 import TradingViewComponent from "../TradingViewComponent";
 
-export default function MintPageExample(props) {
+export default function MintPageView(props) {
   const [isOpen, setIsOpen] = useState(false);
   const firstFieldRef = React.useRef(null);
   const open = () => setIsOpen(!isOpen);
@@ -57,7 +57,7 @@ export default function MintPageExample(props) {
 
               <img className="hero-bg" src={heroBg} />
 
-              <Button mr={5} width={'80px'} onClick={open} zIndex={99}>
+              <Button mr={5} bottom={'65px'} width={'80px'} onClick={open} zIndex={99}>
                 <img  className="group-33937" src={group33937} />
               </Button>
              
@@ -68,7 +68,7 @@ export default function MintPageExample(props) {
         </div>
       </Box>
 
-      <MintPageNavbar />
+      
     </Container>
   );
 }

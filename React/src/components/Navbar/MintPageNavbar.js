@@ -1,8 +1,8 @@
 import React,{useState, useContext} from 'react'
 import {Flex, Box, Spacer, Button, Heading, Img
 } from "@chakra-ui/react"
+import { Link } from 'react-router-dom';
 
-import "./MintPage.css";
 
 import { ContractContext } from "../../contexts/ContractContext";
 import { MintFormContext } from '../../contexts/MintFormContext';
@@ -29,19 +29,11 @@ export default function MintPageNavbar(props) {
 
 
   <Spacer />
-  <Box>
 
-    {stateUserAddress?
-    <Button colorScheme="teal" mr="4" >  Logout </Button> 
-    
-  : <Button onClick={connect}> <img src={frame36594} /></Button>
-  }
-    
-    
-  </Box>
 
-  {stateUserAddress? <Box>Welcome Back! {stateUserAddress}</Box> : null}
-
+  {stateUserAddress? <Box>Welcome Back! {stateUserAddress}</Box> : <Button onClick={connect}> <img src={frame36594} /></Button>}
+  {stateUserAddress? <Button colorScheme="blue"> <Link to="/positions">Positions</Link> </Button>:null }
+  {stateUserAddress? <Button colorScheme="blue"> <Link to="/app">Mint</Link> </Button>:null }
   
 </Flex>
     )

@@ -1,6 +1,6 @@
 import React from 'react'
-import useWindowSize from '../hook/useWindowSize';
-import landing from "../assets/landing.jpg";
+import useWindowSize from '../../hook/useWindowSize';
+import landing from "../../assets/landing.jpg";
 import { Image } from '@chakra-ui/image';
 import { Container } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';

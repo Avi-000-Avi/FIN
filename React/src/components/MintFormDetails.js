@@ -34,6 +34,7 @@ import useTokenList from "../hook/useTokenList";
 import { id } from "@ethersproject/hash";
 import MintFunction from "./MintFunction";
 import DexPrice from "./DexPrice";
+import BurnFunction from "./BurnFunction";
 
 const Details = (props) => {
   const tokenList = useTokenList(
@@ -189,6 +190,7 @@ min={0}
   <NumberDecrementStepper />
 </NumberInputStepper>
 </NumberInput>
+
 
 
 

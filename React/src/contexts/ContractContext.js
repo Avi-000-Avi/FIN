@@ -44,6 +44,7 @@ export function ContractProvider(props) {
 
   };
 
+
   return (
     <ContractContext.Provider value={{connect, stateUserAddress, signedContract, signer, provider,contractAddress}}>
       {props.children}

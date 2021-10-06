@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { ContractContext } from "../contexts/ContractContext";
 import { MintFormContext } from "../contexts/MintFormContext";
 import { ERC20abi } from "../abi/ERC20abi";
-import { ethers, BigNumber } from "ethers";
+import { BigNumber, ethers, utils } from "ethers"
 
 
 export default function MintFunction() {
@@ -19,6 +19,7 @@ export default function MintFunction() {
   const [isApproved, setIsApproved] = useState(false)
 
   const mint = async () => {
+    //parse units has to be changed to get tokens decimal count in second param
     const amount = ethers.utils.parseUnits(mintForm.amount, 18);
 
     let mintTx = await signedContract.mint(
@@ -69,18 +70,14 @@ export default function MintFunction() {
       )
   };
 
-  const getOwnedPositions = async () => {
 
-     const positions = await signedContract.getOwnedPositions()
-
-  }
 
   useEffect(() => {
     if(signer){
     checkIsApproved()
     }
    
-  }, [mintForm.holdToken])
+  }, [mintForm.holdToken, signer ])
 
   return (
     <div>
@@ -96,16 +93,6 @@ export default function MintFunction() {
 
       }
 
-      
-
-      
-
-      <Button
-        size="lg" colorScheme="blue"
-        onClick={getOwnedPositions}
-      >
-        Get Positions
-      </Button>
     </div>
   );
 }
