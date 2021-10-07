@@ -97,4 +97,58 @@ describe("PositionManager tests", function () {
     const fees = await getTokenBalance(fromToken["address"], positionManager.address);
     assert(fees.eq(amount.mul(1).div(100)), "No fees collected");
   });
+
+  it(("Should mint and burn a NFT on the couple " + fromToken["symbol"] + " - " + toToken["symbol"]), async function () {
+    const { positionManager, user } = await setup();
+
+    await fundUserAndApproveAddress(user, fromToken, positionManager.address);
+    const initialBalance = await getTokenBalance(fromToken["address"], user.address);
+
+    if(DEBUG) console.log("Minting...");
+    const mintTx = await positionManager.connect(user).mint({
+      fromToken: fromToken["address"],
+      toToken: toToken["address"],
+      amount: amount,
+      takeProfit: 250,
+      stopLoss: 10,
+      maxGasPrice: 100000
+    });
+    if(DEBUG) console.log("OK");
+
+    const finalBalance = await getTokenBalance(fromToken["address"], user.address);
+    assert(initialBalance.sub(finalBalance).eq(amount), "fromToken balance error");
+
+    const tx = await mintTx.wait();
+    const id = tx.events.find((e) => e.event == 'PositionWasOpened').args[0].id;
+    assert(id.eq(1), "ID mismatch");
+
+    if(DEBUG) console.log("Checking Upkeep");
+    const { upkeepNeeded, performData } = await positionManager.connect(user).checkUpkeep();
+
+    console.log("upkeepNeeded:", upkeepNeeded);
+
+    if(upkeepNeeded) {
+      if(DEBUG) console.log("Preforming Upkeep");
+      await positionManager.connect(user).performUpkeep(performData);
+    }
+
+    // TODO: Make large shift in the liquidity in the pool as to simulate large price shift
+
+    // upkeepNeeded, performData = await positionManager.connect(user).checkUpkeep();
+
+    // if(upkeepNeeded) {
+    //   if(DEBUG) console.log("Preforming Upkeep");
+    //   await positionManager.connect(user).performUpkeep(performData);
+    // }
+
+    if(DEBUG) console.log("Burning...");
+    await positionManager.connect(user).burn(id);
+    if(DEBUG) console.log("OK");
+
+    const positions = await positionManager.connect(user).getOwnedPositions();
+    assert(positions.length == 0, "NFT burning error");
+
+    const fees = await getTokenBalance(fromToken["address"], positionManager.address);
+    assert(fees.eq(amount.mul(1).div(100)), "No fees collected");
+  });
 });

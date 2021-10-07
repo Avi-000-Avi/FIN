@@ -175,11 +175,11 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         emit PositionWasClosed(position);
     }
 
-    function checkUpkeep(bytes calldata /*checkData*/) external override returns (bool upkeepNeeded, bytes memory performData) {
+    function checkUpkeep(/*bytes calldata checkData*/) external override returns (bool upkeepNeeded, bytes memory performData) {
         uint256[] memory results = new uint256[](_tokenIds.current());
         uint256 counter = 0;
 
-        for (uint256 i = 0; i < _tokenIds.current(); i++) {
+        for (uint256 i = 1; i <= _tokenIds.current(); i++) {
             if(positions[i].owner != address(0)) {
                 Position memory position = positions[i];
 
