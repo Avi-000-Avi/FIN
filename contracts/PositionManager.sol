@@ -160,12 +160,10 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         if(token.allowance(address(this), address(ROUTER)) < position.amount)
             token.safeApprove(address(ROUTER), type(uint256).max);
 
-        uint24 poolFee = getLiquidPool(position.fromToken, position.toToken);
-
         ISwapRouter.ExactInputSingleParams memory swapParams = ISwapRouter.ExactInputSingleParams({
             tokenIn: position.fromToken,
             tokenOut: position.toToken,
-            fee: poolFee,
+            fee: getLiquidPool(position.fromToken, position.toToken),
             recipient: position.owner,
             deadline: block.timestamp + 15,
             amountIn: position.amount,
@@ -189,7 +187,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
                     tokenIn: position.fromToken,
                     tokenOut: position.toToken,
                     amountIn: position.amount,
-                    fee: 500, // TODO fix me
+                    fee: getLiquidPool(position.fromToken, position.toToken),
                     sqrtPriceLimitX96: 0
                 });
                 (uint256 amountOut, , ,uint256 gasEstimate) = QUOTER.quoteExactInputSingle(quoterParams);
