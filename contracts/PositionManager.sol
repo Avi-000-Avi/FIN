@@ -207,7 +207,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
     function performUpkeep(bytes calldata performData) external override {
         uint256[] memory positionIDs = abi.decode(performData, (uint256[]));
 
-        for (uint256 i = 0; i < positionIDs.length; i++) {
+        for (uint256 i = 1; i <= positionIDs.length; i++) {
             if(positions[i].owner != address(0)) {
                 _exit(i);
             }
