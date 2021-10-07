@@ -122,28 +122,21 @@ describe("PositionManager tests", function () {
     const id = tx.events.find((e) => e.event == 'PositionWasOpened').args[0].id;
     assert(id.eq(1), "ID mismatch");
 
-    if(DEBUG) console.log("Checking Upkeep");
-    const { upkeepNeeded, performData } = await positionManager.connect(user).checkUpkeep();
-
-    console.log("upkeepNeeded:", upkeepNeeded);
-
-    if(upkeepNeeded) {
-      if(DEBUG) console.log("Preforming Upkeep");
-      await positionManager.connect(user).performUpkeep(performData);
-    }
+    if(DEBUG) console.log("Checking Upkeep...");
+    const { upkeepNeeded, performData } = await positionManager.connect(user).callStatic.checkUpkeep();
 
     // TODO: Make large shift in the liquidity in the pool as to simulate large price shift
 
-    // upkeepNeeded, performData = await positionManager.connect(user).checkUpkeep();
-
-    // if(upkeepNeeded) {
-    //   if(DEBUG) console.log("Preforming Upkeep");
-    //   await positionManager.connect(user).performUpkeep(performData);
-    // }
-
-    if(DEBUG) console.log("Burning...");
-    await positionManager.connect(user).burn(id);
-    if(DEBUG) console.log("OK");
+    if(upkeepNeeded) {
+      if(DEBUG) console.log("Preforming Upkeep...");
+      await positionManager.connect(user).performUpkeep(performData);
+      if(DEBUG) console.log("OK");
+    }
+    else {
+      if(DEBUG) console.log("Burning...");
+      await positionManager.connect(user).burn(id);
+      if(DEBUG) console.log("OK");
+    }
 
     const positions = await positionManager.connect(user).getOwnedPositions();
     assert(positions.length == 0, "NFT burning error");
