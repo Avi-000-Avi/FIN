@@ -48,7 +48,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
     function getOwnedPositions() external view override returns(uint256[] memory) {
         uint256[] memory results = new uint256[](userPositionsCounter[msg.sender]);
         uint256 counter = 0;
-        for (uint256 i = 0; i < _tokenIds.current(); i++) {
+        for (uint256 i = 1; i <= _tokenIds.current(); i++) {
             // slither-disable-next-line incorrect-equality
             if (positions[i].owner == msg.sender) {
                 results[counter] = i;
@@ -175,11 +175,11 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         emit PositionWasClosed(position);
     }
 
-    function checkUpkeep(bytes calldata /*checkData*/) external override returns (bool upkeepNeeded, bytes memory performData) {
+    function checkUpkeep(/*bytes calldata checkData*/) external override returns (bool upkeepNeeded, bytes memory performData) {
         uint256[] memory results = new uint256[](_tokenIds.current());
         uint256 counter = 0;
 
-        for (uint256 i = 0; i < _tokenIds.current(); i++) {
+        for (uint256 i = 1; i <= _tokenIds.current(); i++) {
             if(positions[i].owner != address(0)) {
                 Position memory position = positions[i];
 
@@ -207,7 +207,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
     function performUpkeep(bytes calldata performData) external override {
         uint256[] memory positionIDs = abi.decode(performData, (uint256[]));
 
-        for (uint256 i = 0; i < positionIDs.length; i++) {
+        for (uint256 i = 1; i <= positionIDs.length; i++) {
             if(positions[i].owner != address(0)) {
                 _exit(i);
             }
