@@ -7,8 +7,8 @@ describe("PositionManager tests", function () {
 
   // PARAMETERS
   const DEBUG = true;
-  const fromToken = TOKENS.sushi;
-  const toToken = TOKENS.dai;
+  const fromToken = TOKENS.uni;
+  const toToken = TOKENS.usdc;
   const amount = ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"]);
 
   async function getTokenBalance(token, user) {
@@ -16,9 +16,9 @@ describe("PositionManager tests", function () {
         ERC20_ABI,
         token
     );
-  
+
     const balance = await contract.balanceOf(user);
-  
+
     return balance;
   }
 
@@ -65,7 +65,7 @@ describe("PositionManager tests", function () {
 
   it(("Should mint and burn a NFT on the couple " + fromToken["symbol"] + " - " + toToken["symbol"]), async function () {
     const { positionManager, user } = await setup();
-    
+
     await fundUserAndApproveAddress(user, fromToken, positionManager.address);
     const initialBalance = await getTokenBalance(fromToken["address"], user.address);
 
@@ -86,7 +86,7 @@ describe("PositionManager tests", function () {
     const tx = await mintTx.wait();
     const id = tx.events.find((e) => e.event == 'PositionWasOpened').args[0].id;
     assert(id.eq(1), "ID mismatch");
-    
+
     if(DEBUG) console.log("Burning...");
     await positionManager.connect(user).burn(id);
     if(DEBUG) console.log("OK");
