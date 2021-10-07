@@ -3,27 +3,28 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import "@uniswap/v3-periphery/contracts/interfaces/IQuoterV2.sol";
 import "./IPositionManager.sol";
 import "hardhat/console.sol";
 
-contract PositionManager is ERC721Burnable, IPositionManager, Ownable {
+contract PositionManager is ERC721, IPositionManager, Ownable {
     using Counters for Counters.Counter;
     using SafeERC20 for IERC20;
 
     ISwapRouter internal constant ROUTER = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
+    IQuoterV2 internal constant QUOTER = IQuoterV2(0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6);
     uint8 public feeRate;
     mapping(address => uint256) private collectedFees;
     mapping(uint256 => Position) private positions;
     mapping(address => uint256) private userPositionsCounter;
     Counters.Counter private _tokenIds;
 
-    constructor() ERC721("Financially Intelligent NFT", "FIN") {
-    }
+    constructor() ERC721("Financially Intelligent NFT", "FIN") { }
 
     function setFeeRate(uint8 _fee) external onlyOwner() {
         feeRate = _fee;
@@ -32,7 +33,7 @@ contract PositionManager is ERC721Burnable, IPositionManager, Ownable {
 
     // slither-disable-next-line external-function
     function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
-        require(_exists(tokenId), "Token doesn't exist");
+        require(_exists(tokenId), "Token does not exist");
         return "";
     }
 
@@ -53,68 +54,33 @@ contract PositionManager is ERC721Burnable, IPositionManager, Ownable {
         return results;
     }
 
-    function mint(address holdToken, uint256 amount, uint256 stopLoss, uint256 takeProfit) external override returns(uint256 tokenId) {
-        IERC20 token = IERC20(holdToken);
+    function mint(PositionParams calldata params) external override returns(uint256 tokenId) {
+        IERC20 token = IERC20(params.fromToken);
 
-        require(token.allowance(msg.sender, address(this)) >= amount, "Allowance error");
-        require(token.balanceOf(msg.sender) >= amount, "Balance error");
-        token.safeTransferFrom(msg.sender, address(this), amount);
+        require(token.allowance(msg.sender, address(this)) >= params.amount, "Allowance error");
+        require(token.balanceOf(msg.sender) >= params.amount, "Balance error");
+        token.safeTransferFrom(msg.sender, address(this), params.amount);
 
-        _tokenIds.increment();
-        tokenId = _tokenIds.current();
-
-        Position memory position = Position({
-            id: tokenId,
-            owner: msg.sender,
-            amount: amount,
-            takeProfit: takeProfit,
-            stopLoss: stopLoss,
-            holdToken: holdToken,
-            collateralToken: address(0),
-            createdAt: block.timestamp
-        });
-
-        _mint(msg.sender, tokenId);
-        positions[tokenId] = position;
-        userPositionsCounter[msg.sender]++;
-
-        emit PositionWasOpened(position);
-    }
-
-/*
-    function mint(address holdToken, address collateralToken, uint256 amount, bool swapOnMint, uint256 stopLoss, uint256 takeProfit) external override returns(uint256 tokenId) {
-        IERC20 token;
-        if(swapOnMint)
-            token = IERC20(collateralToken);
-        else
-            token = IERC20(holdToken);
-
-        require(token.allowance(msg.sender, address(this)) >= amount, "Allowance error");
-        require(token.balanceOf(msg.sender) >= amount, "Balance error");
-        token.safeTransferFrom(msg.sender, address(this), amount);
-        
         // collect fees
-        uint256 fee = amount * feeRate / 100;
-        collectedFees[address(token)] = fee;
-        uint256 newAmount = amount - fee;
+        uint256 fee = params.amount * feeRate / 100;
+        collectedFees[address(params.fromToken)] += fee;
+        uint256 newAmount = params.amount - fee;
 
         _tokenIds.increment();
         tokenId = _tokenIds.current();
-        
+
         Position memory position = Position({
             id: tokenId,
             owner: msg.sender,
             amount: newAmount,
-            takeProfit: takeProfit,
-            stopLoss: stopLoss,
-            holdToken: holdToken,
-            collateralToken: collateralToken,
+            amountOut: 0,
+            takeProfit: params.takeProfit,
+            stopLoss: params.stopLoss,
+            fromToken: params.fromToken,
+            toToken: params.toToken,
+            maxGasPrice: params.maxGasPrice,
             createdAt: block.timestamp
         });
-
-        if(swapOnMint) {
-            position.amount = _swap(position.collateralToken, position.holdToken, position.amount, position.owner);
-        }
 
         _mint(msg.sender, tokenId);
         positions[tokenId] = position;
@@ -122,88 +88,108 @@ contract PositionManager is ERC721Burnable, IPositionManager, Ownable {
 
         emit PositionWasOpened(position);
     }
-*/
 
-    // slither-disable-next-line external-function
-    function burn(uint256 tokenId, bool swapOnBurn) external override {
+    function burn(uint256 tokenId) external override {
+        require(_exists(tokenId), "Position not found");
+        require(_isApprovedOrOwner(msg.sender, tokenId), "Not the owner");
+
+        _exit(tokenId);
+    }
+
+    function deposit(uint256 tokenId, uint256 amount) external override {
         require(_exists(tokenId), "Position not found");
         require(_isApprovedOrOwner(msg.sender, tokenId), "Not the owner");
 
         Position memory position = positions[tokenId];
+        IERC20 fromToken = IERC20(position.fromToken);
 
-        if(swapOnBurn) {
-            position.amount = _swap(position.holdToken, position.collateralToken, position.amount, position.owner);
-        } else {
-            IERC20 token = IERC20(position.holdToken);
-            token.safeTransfer(position.owner, position.amount);
-        }
+        require(fromToken.allowance(msg.sender, address(this)) >= amount, "Allowance error");
+        require(fromToken.balanceOf(msg.sender) >= amount, "Balance error");
 
+        position.amount += amount;
+        positions[tokenId] = position;
+
+        fromToken.safeTransferFrom(msg.sender, address(this), amount);
+
+        emit PositionWasUpdated(position);
+    }
+
+    function withdraw(uint256 tokenId, uint256 amount) external override {
+        require(_exists(tokenId), "Position not found");
+        require(_isApprovedOrOwner(msg.sender, tokenId), "Not the owner");
+
+        Position memory position = positions[tokenId];
+        require(amount >= position.amount, "Not enough liquidity");
+        position.amount -= amount;
+        positions[tokenId] = position;
+
+        IERC20 token = IERC20(position.fromToken);
+        token.safeTransfer(position.owner, amount);
+
+        emit PositionWasUpdated(position);
+    }
+
+    function _exit(uint256 tokenId) internal {
+        Position memory position = positions[tokenId];
         _burn(tokenId);
         delete positions[tokenId];
         userPositionsCounter[msg.sender]--;
 
+        IERC20 token = IERC20(position.fromToken);
+        if(token.allowance(address(this), address(ROUTER)) < position.amount)
+            token.safeApprove(address(ROUTER), type(uint256).max);
+
+        ISwapRouter.ExactInputSingleParams memory swapParams = ISwapRouter.ExactInputSingleParams({
+            tokenIn: position.fromToken,
+            tokenOut: position.toToken,
+            fee: 500, // TODO fixme
+            recipient: position.owner,
+            deadline: block.timestamp + 15,
+            amountIn: position.amount,
+            amountOutMinimum: 0, // TODO frontrun me please
+            sqrtPriceLimitX96: 0
+        });
+        position.amountOut = ROUTER.exactInputSingle(swapParams);
+
         emit PositionWasClosed(position);
     }
 
-    function _swap(address fromToken, address toToken, uint256 amount, address recipient) internal returns(uint256) {
-        IERC20 token = IERC20(fromToken);
-        if(token.allowance(address(this), address(ROUTER)) < amount)
-            token.safeApprove(address(ROUTER), type(uint256).max);
-        
-        ISwapRouter.ExactInputSingleParams memory swapParams = ISwapRouter.ExactInputSingleParams({
-            tokenIn: fromToken,
-            tokenOut: toToken,
-            fee: 500, // TODO fixme
-            recipient: recipient,
-            deadline: block.timestamp + 15,
-            amountIn: amount,
-            amountOutMinimum: 0,
-            sqrtPriceLimitX96: 0
-        });
-        
-        return ROUTER.exactInputSingle(swapParams);
-    }
-
-    /*
-    function checker() external view returns (bool canExec, bytes memory execPayload) {
+    function checkUpkeep(bytes calldata /*checkData*/) external override returns (bool upkeepNeeded, bytes memory performData) {
         uint256[] memory results = new uint256[](_tokenIds.current());
         uint256 counter = 0;
-        uint256 price;
 
-        // for each NFT
         for (uint256 i = 0; i < _tokenIds.current(); i++) {
-            if(positions[i].owner != address(0) && positions[i].maxGasPrice <= tx.gasprice) {
-                (price, ) = oracleQuoter.getExpectedReturn(IERC20(positions[i].fromToken), IERC20(positions[i].toToken), positions[i].fromTokenAmount, 10, 0);
+            if(positions[i].owner != address(0)) {
+                Position memory position = positions[i];
 
-                if(price <= positions[i].stopLoss || price >= positions[i].takeProfit) {
-                    results[counter] = i;
+                IQuoterV2.QuoteExactInputSingleParams memory quoterParams = IQuoterV2.QuoteExactInputSingleParams({
+                    tokenIn: position.fromToken,
+                    tokenOut: position.toToken,
+                    amountIn: position.amount,
+                    fee: 500, // TODO fix me
+                    sqrtPriceLimitX96: 0
+                });
+                (uint256 amountOut, , ,uint256 gasEstimate) = QUOTER.quoteExactInputSingle(quoterParams);
+
+                if(gasEstimate <= position.maxGasPrice && ( position.stopLoss <= amountOut || amountOut > position.takeProfit)) {
+                    results[counter++] = i;
                 }
             }
         }
 
         if(results.length != 0) {
-            canExec = true;
-            execPayload = abi.encode(results);
+            upkeepNeeded = true;
+            performData = abi.encode(results);
         }
     }
 
-    function execute(bytes calldata execPayload) external {
-        uint256[] memory positionIDs = abi.decode(execPayload, (uint256[]));
-        uint256 id;
-        uint256 price;
+    function performUpkeep(bytes calldata performData) external override {
+        uint256[] memory positionIDs = abi.decode(performData, (uint256[]));
 
         for (uint256 i = 0; i < positionIDs.length; i++) {
-            id = positionIDs[i];
-
-            if(positions[id].owner != address(0) && positions[id].maxGasPrice <= tx.gasprice) {
-                (price, ) = oracleQuoter.getExpectedReturn(IERC20(positions[i].fromToken), IERC20(positions[i].toToken), positions[i].fromTokenAmount, 10, 0);
-
-                if(price <= positions[id].stopLoss || price >= positions[id].takeProfit) {
-                    uint256 usedGas = _estimateUsedGas();
-                    _swapAndBurn(id, usedGas);
-                }
+            if(positions[i].owner != address(0)) {
+                _exit(i);
             }
         }
     }
-    */
 }

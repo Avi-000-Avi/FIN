@@ -31,11 +31,12 @@ import { ContractContext } from "../contexts/ContractContext";
 import { MintFormContext } from "../contexts/MintFormContext";
 
 import useTokenList from "../hook/useTokenList";
-import { id } from "@ethersproject/hash";
 import MintFunction from "./MintFunction";
 import DexPrice from "./DexPrice";
 
-const Details = (props) => {
+const MintFormDetails = (props) => {
+
+
   const tokenList = useTokenList(
     "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
   );
@@ -81,9 +82,10 @@ const Details = (props) => {
     <Box marginLeft={'800px'} paddingTop={'200px'} textColor='#4FD1C5'>
     <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start" > 
 
+    <DexPrice />
+
       <Text>Set Your Deposit Token</Text>
 
-      <DexPrice />
 
       <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
 
@@ -113,7 +115,7 @@ const Details = (props) => {
 
             <NumberInput
               onChange={changeAmount}
-              maxW="50px"
+              maxW="100px"
               paddingLeft='1rem'
               mr="2rem"
               defaultValue={0}
@@ -132,10 +134,13 @@ const Details = (props) => {
 
         <GridItem colSpan={2}>
           <Flex spacing={30}>
-
           <GridItem colSpan={1}>
           <Image src={collateralcoinImage}/>
             </GridItem>
+
+            
+            
+
             <GridItem colSpan={1}>
               <Select onChange={changeCollateralToken}>
 
@@ -151,14 +156,16 @@ const Details = (props) => {
            
               </Select>
 
+              </GridItem>
 
+              
 
-            <Text>Max Price</Text>
+            <Text p={2}>Max Price</Text>
 
             <NumberInput
               onChange={changeTakeProfit}
-              maxW="50px"
-              mr="2rem"
+              maxW="100px"
+              
               defaultValue={0}
               min={0}
             >
@@ -169,23 +176,25 @@ const Details = (props) => {
               </NumberInputStepper>
             </NumberInput>
 
-            <Text>Min Price</Text>
+            <Text p={2}>Min Price</Text>
 
 <NumberInput
 onChange={changeStopLoss}
-maxW="50px"
-mr="2rem"
+maxW="100px"
 defaultValue={0}
 min={0}
 >
 <NumberInputField value={mintForm.stopLoss} />
-<NumberInputStepper ml="2rem">
+<NumberInputStepper >
   <NumberIncrementStepper />
   <NumberDecrementStepper />
 </NumberInputStepper>
 </NumberInput>
 
-            </GridItem>
+
+
+
+            
           </Flex>
         </GridItem>
 
@@ -199,4 +208,4 @@ min={0}
   );
 };
 
-export default Details;
+export default MintFormDetails;

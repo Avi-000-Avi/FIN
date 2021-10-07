@@ -2,13 +2,14 @@ import React, { useEffect, useState, Suspense, Fragment } from "react";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { MintFormProvider } from "./contexts/MintFormContext";
 import { ContractProvider } from "./contexts/ContractContext";
-import Landing from "./components/Landing"
-import MintPage from "./components/MintPage"
-import MintPageExample from "./components/Navbar/MintPageExample";
+import Landing from "./components/Views/Landing"
+import MintPageNavbar from "./components/Navbar/MintPageNavbar";
+import MintPageView from "./components/Views/MintPageView";
+import PositionsView from "./components/Views/PositionsView";
 
 //STYLING
 
-import { FcCandleSticks } from "react-icons/fc";
+
 
 
 function App() {
@@ -21,7 +22,10 @@ function App() {
       <MintFormProvider>
 
       <Route exact path='/' component={Landing}/>
-      <Route exact path='/app' component={MintPageExample}/>
+
+      <MintPageNavbar />
+      <Route exact path='/app' component={MintPageView}/>
+      <Route exact path='/positions' component={PositionsView}/>
 
       </MintFormProvider>
     </ContractProvider>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import "./MintPage.css";
 
 // STYLING AND ASSETS
@@ -9,12 +9,16 @@ import { SimpleGrid, Button, } from "@chakra-ui/react";
 import { Container, Box } from "@chakra-ui/layout";
 import { Popover, PopoverTrigger, PopoverContent} from "@chakra-ui/popover";
 import FocusLock from "@chakra-ui/focus-lock";
+import { Text } from "@chakra-ui/layout";
 
-import Details from "../Details";
-import MintPageNavbar from "./MintPageNavbar";
+import MintFormDetails from "../MintFormDetails";
+import MintPageNavbar from "../Navbar/MintPageNavbar";
 import TradingViewComponent from "../TradingViewComponent";
 
-export default function MintPageExample(props) {
+export default function MintPageView(props) {
+
+
+
   const [isOpen, setIsOpen] = useState(false);
   const firstFieldRef = React.useRef(null);
   const open = () => setIsOpen(!isOpen);
@@ -27,22 +31,22 @@ export default function MintPageExample(props) {
           <div className="mint-page">
             <SimpleGrid columns={1} pos="absolute" zIndex={99}>
               <Box>
-                <Details />
+                <MintFormDetails />
               </Box>
 
-              <Box>
+              <Box >
               <Popover
+              isLazy
               initialFocusRef={firstFieldRef}
         returnFocusOnClose={false}
         isOpen={isOpen}
         onClose={close}
-        placement="right"
         closeOnBlur={false}
       >
-        <PopoverTrigger>
-          <div></div>
+        <PopoverTrigger >
+          <Fragment > <Text >{''}</Text> </Fragment>
         </PopoverTrigger>
-        <PopoverContent zIndex={99} p={5}>
+        <PopoverContent bg="blue.800" borderColor="blue.800" zIndex={99} p={0} top={'250px'} left={'150px'} >
           <FocusLock returnFocus persistentFocus={false}>
             <TradingViewComponent firstFieldRef={firstFieldRef} />
           </FocusLock>
@@ -56,10 +60,10 @@ export default function MintPageExample(props) {
 
               <img className="hero-bg" src={heroBg} />
 
-              <Button mr={5} onClick={open} zIndex={99}>
-                <img className="group-33937" src={group33937} />
+              <Button mr={5} bottom={'65px'} width={'80px'} onClick={open} zIndex={99}>
+                <img  className="group-33937" src={group33937} />
               </Button>
-              <img className="rectangle-141" src={rectangle141} />
+             
 
               
             </div>
@@ -67,7 +71,7 @@ export default function MintPageExample(props) {
         </div>
       </Box>
 
-      <MintPageNavbar />
+      
     </Container>
   );
 }
