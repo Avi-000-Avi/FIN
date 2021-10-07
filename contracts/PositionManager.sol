@@ -7,17 +7,21 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
+import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/IQuoterV2.sol";
 import "./IPositionManager.sol";
+import "./UniversalERC20.sol";
 import "hardhat/console.sol";
 
 contract PositionManager is ERC721, IPositionManager, Ownable {
     using Counters for Counters.Counter;
     using SafeERC20 for IERC20;
+    using UniversalERC20 for IERC20;
 
+    IUniswapV3Factory internal constant FACTORY = IUniswapV3Factory(0x1F98431c8aD98523631AE4a59f267346ea31F984);
     ISwapRouter internal constant ROUTER = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
-    IQuoterV2 internal constant QUOTER = IQuoterV2(0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6);
+    IQuoterV2 internal constant QUOTER = IQuoterV2(0x0209c4Dc18B2A1439fD2427E34E7cF3c6B91cFB9);
     uint8 public feeRate;
     mapping(address => uint256) private collectedFees;
     mapping(uint256 => Position) private positions;
@@ -54,12 +58,29 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         return results;
     }
 
+    function getLiquidPool(address fromToken, address toToken) internal view returns (uint24 fee) {
+        address pool500 = FACTORY.getPool(fromToken, toToken, 500);
+        address pool3000 = FACTORY.getPool(fromToken, toToken, 3000);
+        address pool10000 = FACTORY.getPool(fromToken, toToken, 10000);
+
+        IERC20(fromToken).universalBalanceOf(pool500) > IERC20(fromToken).universalBalanceOf(pool3000)
+            ? fee = 500
+            : IERC20(fromToken).universalBalanceOf(pool3000) > IERC20(fromToken).universalBalanceOf(pool10000)
+                ? fee = 3000
+                : fee = 10000;
+    }
+
     function mint(PositionParams calldata params) external override returns(uint256 tokenId) {
         IERC20 token = IERC20(params.fromToken);
 
         require(token.allowance(msg.sender, address(this)) >= params.amount, "Allowance error");
         require(token.balanceOf(msg.sender) >= params.amount, "Balance error");
         token.safeTransferFrom(msg.sender, address(this), params.amount);
+
+        uint24 poolFee = getLiquidPool(params.fromToken, params.toToken);
+        address pool = FACTORY.getPool(params.fromToken, params.toToken, poolFee);
+        require(pool != address(0), "No pool available");
+        require(IERC20(params.fromToken).universalBalanceOf(pool) > params.amount * 10, "Not enough liquidity");
 
         // collect fees
         uint256 fee = params.amount * feeRate / 100;
@@ -139,10 +160,12 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
         if(token.allowance(address(this), address(ROUTER)) < position.amount)
             token.safeApprove(address(ROUTER), type(uint256).max);
 
+        uint24 poolFee = getLiquidPool(position.fromToken, position.toToken);
+
         ISwapRouter.ExactInputSingleParams memory swapParams = ISwapRouter.ExactInputSingleParams({
             tokenIn: position.fromToken,
             tokenOut: position.toToken,
-            fee: 500, // TODO fixme
+            fee: poolFee,
             recipient: position.owner,
             deadline: block.timestamp + 15,
             amountIn: position.amount,
