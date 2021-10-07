@@ -48,7 +48,7 @@ contract PositionManager is ERC721, IPositionManager, Ownable {
     function getOwnedPositions() external view override returns(uint256[] memory) {
         uint256[] memory results = new uint256[](userPositionsCounter[msg.sender]);
         uint256 counter = 0;
-        for (uint256 i = 0; i < _tokenIds.current(); i++) {
+        for (uint256 i = 1; i <= _tokenIds.current(); i++) {
             // slither-disable-next-line incorrect-equality
             if (positions[i].owner == msg.sender) {
                 results[counter] = i;
