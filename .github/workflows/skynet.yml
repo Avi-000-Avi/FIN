@@ -34,6 +34,8 @@ jobs:
       - name: Build webapp
         run: yarn build
         working-directory: ./React
+        env:
+          CI: ""
 
       - name: Deploy to Skynet
         uses: SkynetLabs/deploy-to-skynet-action@v2
