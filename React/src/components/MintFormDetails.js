@@ -61,21 +61,21 @@ const MintFormDetails = (props) => {
     toggleSwapOnMint
   } = useContext(MintFormContext);
 
-  const [holdcoinImage, setholdcoinImage] = useState("https://assets.coingecko.com/coins/images/12504/thumb/uniswap-uni.png?1600306604")
-  const [collateralcoinImage, setcollateralcoinImage] = useState("https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880")
+  const [holdcoinImage, setholdcoinImage] = useState("")
+  const [collateralcoinImage, setcollateralcoinImage] = useState("")
   
   useEffect(()=>{
 
-    const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
-  .then(res => setholdcoinImage(res.data.image.thumb))
+  //   const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
+  // .then(res => setholdcoinImage(res.data.image.thumb))
 
 
   },[mintForm.holdToken])
 
   useEffect(()=>{
 
-  const grabcollateralCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
-  .then(res => setcollateralcoinImage(res.data.image.thumb))
+  // const grabcollateralCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
+  // .then(res => setcollateralcoinImage(res.data.image.thumb))
 
   },[ mintForm.collateralToken])
 
