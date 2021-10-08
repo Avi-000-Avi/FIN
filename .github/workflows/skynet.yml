@@ -15,10 +15,15 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: Install dependencies
+      - name: Install contract dependencies
         run: yarn install
+        working-directory: .
+      
+      - name: Compile contracts
+        run: yarn compile
+        working-directory: .
 
-      - name: Install dependencies
+      - name: Install react dependencies
         run: yarn install
         working-directory: ./React
 
