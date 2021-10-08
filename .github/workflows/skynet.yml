@@ -20,13 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        with:
-          path: ./React
+        working-directory: ./React
 
       - name: Build webapp
         run: yarn build
-        with:
-          path: ./React
+        working-directory: ./React
 
       - name: Deploy to Skynet
         uses: SkynetLabs/deploy-to-skynet-action@v2
