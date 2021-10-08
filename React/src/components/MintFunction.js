@@ -34,9 +34,16 @@ export default function MintFunction() {
         maxGasPrice: 100000
       },{
         gasPrice: signer.getGasPrice(),
-        gasLimit: 100000,
+        gasLimit: 400000,
       })
       .catch((e)=>window.alert(e.message))
+
+      const tx = await mintTx.wait()
+
+
+      if(tx){
+        window.alert(`Transaction confirmed! See TxID here: https://rinkeby.etherscan.io/tx/${tx.transactionHash}`)
+      }
 
 
      
@@ -53,7 +60,7 @@ export default function MintFunction() {
       ethers.constants.MaxUint256,
       {
         gasPrice: signer.getGasPrice(),
-        gasLimit: 100000,
+        gasLimit: 300000,
       }
     );
 
@@ -75,7 +82,7 @@ export default function MintFunction() {
       contractAddress,
       {
         gasPrice: signer.getGasPrice(),
-        gasLimit: 100000,
+        gasLimit: 300000,
       }
     ).then(res=>{
       if (res._hex !== "0x00"){

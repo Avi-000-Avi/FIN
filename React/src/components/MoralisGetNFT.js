@@ -54,8 +54,8 @@ export default function MoralisGetNFT() {
     return (
     <Fragment>
         <FormControl id="address">
-        <FormLabel>Get Positions from Address with Moralis API</FormLabel>
-        <Input onChange={changeAddress} value={address} type="text" />
+        <FormLabel>Get Positions from Address with Moralis API (Rinkeby)</FormLabel>
+        <Input width='500px' onChange={changeAddress} value={address} type="text" />
         <Button onClick={getPositionsFromAddress}> Search </Button>
       </FormControl>
 

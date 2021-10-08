@@ -14,7 +14,7 @@ export default function BurnFunction(props) {
         contractAddress,
       } = useContext(ContractContext);
 
-      console.log(signedContract, tokenId)
+    
     
     
       const burn = async () => {
@@ -22,7 +22,7 @@ export default function BurnFunction(props) {
             tokenId,
             {
                 gasPrice: signer.getGasPrice(),
-                gasLimit: 100000,
+                gasLimit: 300000,
               }
         )
         .catch((e)=>window.alert(e.message))

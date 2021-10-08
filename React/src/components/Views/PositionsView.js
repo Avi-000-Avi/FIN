@@ -15,6 +15,7 @@ import {
 import BurnFunction from "../BurnFunction";
 import DexPrice from "../DexPrice";
 import MoralisGetNFT from "../MoralisGetNFT";
+import useTokenList from "../../hook/useTokenList";
 
 export default function PositionsView() {
   const {
@@ -24,6 +25,12 @@ export default function PositionsView() {
     provider,
     contractAddress,
   } = useContext(ContractContext);
+
+  const tokenList = useTokenList(
+    "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
+  );
+
+  console.log(tokenList)
 
   const [tokenIds, setTokenIds] = useState([]);
   const [positionData, setPositionData] = useState([]);
@@ -47,14 +54,20 @@ export default function PositionsView() {
           for (let i = 0; i < tokenIds.length; i++) {
             let position = await signedContract.getPosition(tokenIds[i]);
 
-            if (true
-              // position.fromToken.toString() !==
-              // "0x0000000000000000000000000000000000000000"
+            let token = tokenList.filter(token => token.address == position.fromToken.toString())
+            let recieveToken = tokenList.filter(token => token.address == position.toToken.toString())
+
+
+
+            console.log(token)
+
+            if (
+               position.fromToken.toString() !== "0x0000000000000000000000000000000000000000"
             ) {
               res.push({
                 id: position.id._hex.toString(),
-                inputToken: position.fromToken.toString(),
-                recieveToken: position.toToken.toString(),
+                inputToken: token[0].name,
+                recieveToken: recieveToken[0].name,
                 amount: utils.formatEther(position.amount.toString(), {
                   commify: true,
                   pad: true,

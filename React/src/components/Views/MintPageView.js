@@ -46,7 +46,7 @@ export default function MintPageView(props) {
         <PopoverTrigger >
           <Fragment > <Text >{''}</Text> </Fragment>
         </PopoverTrigger>
-        <PopoverContent bg="blue.800" borderColor="blue.800" zIndex={99} p={0} top={'250px'} left={'150px'} >
+        <PopoverContent bg="blue.800" borderColor="blue.800" zIndex={99} p={0} top={'250px'} left={'250px'} >
           <FocusLock returnFocus persistentFocus={false}>
             <TradingViewComponent firstFieldRef={firstFieldRef} />
           </FocusLock>
