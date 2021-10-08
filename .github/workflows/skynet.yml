@@ -18,13 +18,20 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Install dependencies
+        run: yarn install
+        with:
+          path: ./React
+
       - name: Build webapp
         run: yarn build
+        with:
+          path: ./React
 
       - name: Deploy to Skynet
         uses: SkynetLabs/deploy-to-skynet-action@v2
 
         with:
-          upload-dir: public
+          upload-dir: ./React/build
           github-token: ${{ secrets.GITHUB_TOKEN }}
           registry-seed: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.REGISTRY_SEED || '' }}
