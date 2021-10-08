@@ -44,3 +44,4 @@ jobs:
           upload-dir: ./React/build
           github-token: ${{ secrets.GITHUB_TOKEN }}
           registry-seed: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.REGISTRY_SEED || '' }}
+          try-files: index.html /index.html
