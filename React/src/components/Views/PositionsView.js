@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import BurnFunction from "../BurnFunction";
 import DexPrice from "../DexPrice";
+import MoralisGetNFT from "../MoralisGetNFT";
 
 export default function PositionsView() {
   const {
@@ -46,9 +47,9 @@ export default function PositionsView() {
           for (let i = 0; i < tokenIds.length; i++) {
             let position = await signedContract.getPosition(tokenIds[i]);
 
-            if (
-              position.fromToken.toString() !==
-              "0x0000000000000000000000000000000000000000"
+            if (true
+              // position.fromToken.toString() !==
+              // "0x0000000000000000000000000000000000000000"
             ) {
               res.push({
                 id: position.id._hex.toString(),
@@ -108,6 +109,8 @@ export default function PositionsView() {
           ))}
         </Tbody>
       </Table>
+
+      <MoralisGetNFT/>
     </div>
   );
 }

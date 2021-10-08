@@ -7,12 +7,17 @@ import MintPageNavbar from "./components/Navbar/MintPageNavbar";
 import MintPageView from "./components/Views/MintPageView";
 import PositionsView from "./components/Views/PositionsView";
 
+
+
+
+
 //STYLING
 
 
 
 
 function App() {
+
 
 
 

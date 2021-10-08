@@ -30,16 +30,24 @@ import axios from "axios";
 import { ContractContext } from "../contexts/ContractContext";
 import { MintFormContext } from "../contexts/MintFormContext";
 
+
 import useTokenList from "../hook/useTokenList";
 import MintFunction from "./MintFunction";
 import DexPrice from "./DexPrice";
 
+import {rinkebyList} from "../assets/rinkebyList";
+
 const MintFormDetails = (props) => {
 
+  const tokenList = rinkebyList
+  const rinkebyLinkAddress = '0x01be23585060835e02b77ef475b0cc51aa1e0709'
+  // const uniAddress = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 
-  const tokenList = useTokenList(
-    "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
-  );
+  // const tokenList = useTokenList(
+  //   "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
+  // );
+
+  console.log(tokenList)
 
   const { connect, stateUserAddress, signedContract } =
     useContext(ContractContext);
@@ -99,8 +107,8 @@ const MintFormDetails = (props) => {
             <GridItem colSpan={1}>
               <Select onChange={changeHoldToken}>
 
-              <option value={['0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984','UNI']}>
-                    {"UNI"}
+              <option value={[rinkebyLinkAddress,'LINK']}>
+                    {"LINK"}
                   </option>
 
                 {tokenList.map((token, id) => (
