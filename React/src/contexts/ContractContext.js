@@ -6,7 +6,7 @@ import { ethers, BigNumber } from "ethers";
 export const ContractContext = createContext();
 
 export function ContractProvider(props) {
-  const contractAddress = "0xb0d4afd8879ed9f52b28595d31b441d079b2ca07";
+  const contractAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90";
   const ABI = abi.abi;
   const ALCHEMY = "https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F";
 
@@ -16,12 +16,12 @@ export function ContractProvider(props) {
   const [provider, setProvider] = useState()
   
 
-  
-
   let userAddress;
 
   const connect = async () => {
-   let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    let provider
+    if(window.ethereum != null){
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any")}
     //  provider = new ethers.providers.JsonRpcProvider();
     await provider.send("eth_requestAccounts", [0]);
     let signer = provider.getSigner();

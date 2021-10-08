@@ -21,8 +21,10 @@ export default function MintFunction() {
   const mint = async () => {
     //parse units has to be changed to get tokens decimal count in second param
     const amount = ethers.utils.parseUnits(mintForm.amount, 18);
-
-    let mintTx = await signedContract.mint(
+  //  const maxPrice = ethers.utils.parseUnits(mintForm.takeProfit, 18);
+   // const minPrice = ethers.utils.parseUnits(mintForm.stopLoss, 18);
+    
+     const mintTx = await signedContract.mint(
       {
         fromToken: mintForm.holdToken,
         toToken: mintForm.collateralToken,
@@ -30,7 +32,21 @@ export default function MintFunction() {
         takeProfit: mintForm.takeProfit,
         stopLoss: mintForm.stopLoss,
         maxGasPrice: 100000
+      },{
+        gasPrice: signer.getGasPrice(),
+        gasLimit: 400000,
       })
+      .catch((e)=>window.alert(e.message))
+
+      const tx = await mintTx.wait()
+
+
+      if(tx){
+        window.alert(`Transaction confirmed! See TxID here: https://rinkeby.etherscan.io/tx/${tx.transactionHash}`)
+      }
+
+
+     
   };
 
   const approve = async () => {
@@ -44,22 +60,29 @@ export default function MintFunction() {
       ethers.constants.MaxUint256,
       {
         gasPrice: signer.getGasPrice(),
-        gasLimit: 100000,
+        gasLimit: 300000,
       }
     );
+
+    const tx = await mintTx.wait()
+
+    if(tx.confirmations ==1){
+
+      window.alert(`Transaction confirmed! See TxID here: https://rinkeby.etherscan.io/tx/${tx.transactionHash}`)
+      checkIsApproved()
+    }
+
   };
 
   const checkIsApproved = async () => {
     let contract = new ethers.Contract(mintForm.holdToken, ERC20abi, provider);
-
-    //allowance(address owner, address spender)
 
     let mintTx = await contract.allowance(
       stateUserAddress,
       contractAddress,
       {
         gasPrice: signer.getGasPrice(),
-        gasLimit: 100000,
+        gasLimit: 300000,
       }
     ).then(res=>{
       if (res._hex !== "0x00"){

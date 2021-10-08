@@ -13,12 +13,19 @@ export default function BurnFunction(props) {
         provider,
         contractAddress,
       } = useContext(ContractContext);
+
+    
     
     
       const burn = async () => {
         let mintTx = await signedContract.burn(
-            tokenId
-        );
+            tokenId,
+            {
+                gasPrice: signer.getGasPrice(),
+                gasLimit: 300000,
+              }
+        )
+        .catch((e)=>window.alert(e.message))
 
       };
     

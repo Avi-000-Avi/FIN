@@ -30,16 +30,25 @@ import axios from "axios";
 import { ContractContext } from "../contexts/ContractContext";
 import { MintFormContext } from "../contexts/MintFormContext";
 
+
 import useTokenList from "../hook/useTokenList";
 import MintFunction from "./MintFunction";
 import DexPrice from "./DexPrice";
 
+import {rinkebyList} from "../assets/rinkebyList";
+import Transaction from "./Transaction/Transaction";
+
 const MintFormDetails = (props) => {
 
+  // const tokenList = rinkebyList
+  // const rinkebyLinkAddress = '0x01be23585060835e02b77ef475b0cc51aa1e0709'
+ const uniAddress = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 
   const tokenList = useTokenList(
     "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
   );
+
+  console.log(tokenList)
 
   const { connect, stateUserAddress, signedContract } =
     useContext(ContractContext);
@@ -53,8 +62,8 @@ const MintFormDetails = (props) => {
     toggleSwapOnMint
   } = useContext(MintFormContext);
 
-  const [holdcoinImage, setholdcoinImage] = useState("https://assets.coingecko.com/coins/images/12504/thumb/uniswap-uni.png?1600306604")
-  const [collateralcoinImage, setcollateralcoinImage] = useState("https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880")
+  const [holdcoinImage, setholdcoinImage] = useState("")
+  const [collateralcoinImage, setcollateralcoinImage] = useState("")
   
   useEffect(()=>{
 
@@ -69,22 +78,27 @@ const MintFormDetails = (props) => {
   const grabcollateralCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
   .then(res => setcollateralcoinImage(res.data.image.thumb))
 
+  if (!collateralcoinImage){
+    setcollateralcoinImage("https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880")
+  }
+
   },[ mintForm.collateralToken])
 
 
 
-  
 
   
 
 
   return (
     <Box marginLeft={'800px'} paddingTop={'200px'} textColor='#4FD1C5'>
+      {stateUserAddress? 
     <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start" > 
 
-    <DexPrice />
+      <DexPrice inputToken={mintForm.holdToken}/>
 
       <Text>Set Your Deposit Token</Text>
+     
 
 
       <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
@@ -99,7 +113,7 @@ const MintFormDetails = (props) => {
             <GridItem colSpan={1}>
               <Select onChange={changeHoldToken}>
 
-              <option value={['0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984','UNI']}>
+              <option value={[uniAddress,'UNI']}>
                     {"UNI"}
                   </option>
 
@@ -144,9 +158,10 @@ const MintFormDetails = (props) => {
             <GridItem colSpan={1}>
               <Select onChange={changeCollateralToken}>
 
-              <option value={['0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE','ETH']}>
+              <option value={["0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",'ETH']}>
                     {"ETH"}
                   </option>
+
 
                 {tokenList.map((token, id) => (
                   <option value={[token.address,token.symbol]} key={id}>
@@ -204,6 +219,7 @@ min={0}
         <GridItem></GridItem>
       </SimpleGrid>
     </VStack>
+    : null}
     </Box>
   );
 };

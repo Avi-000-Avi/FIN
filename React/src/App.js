@@ -7,30 +7,31 @@ import MintPageNavbar from "./components/Navbar/MintPageNavbar";
 import MintPageView from "./components/Views/MintPageView";
 import PositionsView from "./components/Views/PositionsView";
 
+
 //STYLING
-
-
 
 
 function App() {
 
-
-
   return (
     <Fragment>
+
     <ContractProvider>
       <MintFormProvider>
-
-      <Route exact path='/' component={Landing}/>
-
-      <MintPageNavbar />
+   <Switch>
+   <Route exact path="/" component={Landing} />
+   <div>
+      <MintPageNavbar/>
       <Route exact path='/app' component={MintPageView}/>
       <Route exact path='/positions' component={PositionsView}/>
-
+      </div>
+      </Switch>
       </MintFormProvider>
     </ContractProvider>
+    
     </Fragment>
   );
+
 }
 
 export default App;
