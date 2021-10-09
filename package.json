@@ -35,7 +35,7 @@
     "test": "hardhat test --network hardhat",
     "compile": "hardhat compile",
     "deploy-local": "hardhat run --network localhost scripts/deploy.js",
-    "fund-local": "hardhat run --network localhost scripts/fund_wallet.js",
+    "fund-local": "hardhat run --network localhost scripts/fund.js",
     "deploy": "hardhat deploy",
     "fund-wallet": "node scripts/fund_wallet.js"
   }
