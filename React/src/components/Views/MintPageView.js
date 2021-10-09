@@ -29,7 +29,7 @@ export default function MintPageView(props) {
             <Flex py={[0, 10, 20]}
       direction={{ base: 'column-reverse', md: 'row' }} p ={10}>
             <MintFormDetails /> 
-     <TradingViewComponent firstFieldRef={firstFieldRef} />
+     <TradingViewComponent firstFieldRef={firstFieldRef}/>
      </Flex>
      <img src ={backgroundLines} maxW="1400px"/>
      

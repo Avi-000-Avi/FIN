@@ -10,7 +10,7 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
+  TableCaption,Container
 } from "@chakra-ui/react";
 import BurnFunction from "../BurnFunction";
 import DexPrice from "../DexPrice";
@@ -90,9 +90,13 @@ export default function PositionsView() {
   }, [stateUserAddress]);
 
   return (
-    <div>
-      <Button onClick={showPositions}> Show Positions </Button>
-
+    <Container maxW="1400px" maxH="1400px" p={0} boxShadow="base" backgroundColor="#232945" borderRadius="10">
+      <Button onClick={showPositions} colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+    background: "white",
+    color: "teal",
+  }} > Show Positions </Button>
+  
+      <Container maxW="1400px" maxH="1000px" color="white" boxShadow="base" backgroundColor="#232945" borderRadius="10">
       <Table size="sm">
         <Thead>
           <Tr>
@@ -108,13 +112,13 @@ export default function PositionsView() {
         <Tbody>
           {positionData.map((position) => (
             <Tr>
-              <Td>{position.id}</Td>
-              <Td>{position.inputToken}</Td>
-              <Td>{position.recieveToken}</Td>
-              <Td><DexPrice inputToken={position.inputToken} /> </Td>
-              <Td isNumeric>{position.amount}</Td>
-              <Td isNumeric>{position.maxPrice}</Td>
-              <Td isNumeric>{position.minPrice}</Td>
+              <Td>{position.id}convert</Td>
+              <Td>{position.inputToken}convert</Td>
+              <Td>{position.recieveToken}convert</Td>
+              <Td><DexPrice inputToken={position.inputToken} /> convert</Td>
+              <Td isNumeric>{position.amount}convert</Td>
+              <Td isNumeric>{position.maxPrice}convert</Td>
+              <Td isNumeric>{position.minPrice}convert</Td>
               <Td isNumeric>
                 <BurnFunction tokenId={position.id} />
               </Td>
@@ -122,8 +126,8 @@ export default function PositionsView() {
           ))}
         </Tbody>
       </Table>
-
+      </Container>
       <MoralisGetNFT/>
-    </div>
+    </Container>
   );
 }
