@@ -4,6 +4,7 @@ import { ContractContext } from "../contexts/ContractContext";
 import { MintFormContext } from "../contexts/MintFormContext";
 import { ERC20abi } from "../abi/ERC20abi";
 import { BigNumber, ethers, utils } from "ethers"
+import { Text } from "@chakra-ui/layout";
 
 
 export default function MintFunction() {
@@ -39,6 +40,7 @@ export default function MintFunction() {
       .catch((e)=>window.alert(e.message))
 
       const tx = await mintTx.wait()
+      .catch((e)=>window.alert(e.message))
 
 
       if(tx){
@@ -67,7 +69,6 @@ export default function MintFunction() {
     const tx = await mintTx.wait()
 
     if(tx.confirmations ==1){
-
       window.alert(`Transaction confirmed! See TxID here: https://rinkeby.etherscan.io/tx/${tx.transactionHash}`)
       checkIsApproved()
     }
@@ -104,6 +105,13 @@ export default function MintFunction() {
     }
    
   }, [mintForm.holdToken, signer ])
+
+  if(!stateUserAddress){
+    return (
+    <Text>
+      Connect Wallet
+    </Text>)
+  }
 
   return (
     <div>

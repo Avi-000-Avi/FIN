@@ -8,8 +8,7 @@ import logo5 from '../../assets/logo5.svg'
 
 import { ContractContext } from "../../contexts/ContractContext";
 import { MintFormContext } from '../../contexts/MintFormContext';
-import frame36594 from "../../assets/MintPageForm/frame36594.svg";
-import metamask from "../../assets/MintPageForm/metamask.svg";
+import wallet from "../../assets/wallet.png";
 
 import { Text} from "@chakra-ui/react";
 
@@ -29,19 +28,24 @@ export default function MintPageNavbar(props) {
 <Link to="/">
   <Flex margin={2} spacing={10} >
   <Image src={logo5} />
-  <Heading size="md" > Financially Intelligent NFT </Heading> 
+  <Heading  size="m" >Financially Intelligent NFTs</Heading> 
   </Flex>
   </Link>
 
   <Spacer />
 
   <Spacer />
-  {stateUserAddress? <Text p={2} >Welcome Back! {stateUserAddress}</Text> : <Button onClick={connect} margin={2}
+  {stateUserAddress? <Button margin={2}
   colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
     background: "white",
     color: "teal",
   }}
-  >Connect With Wallet<img src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-wallet-man-accessories-kiranshastry-lineal-kiranshastry.png" style={{width:"25px",hieght:"25px",paddingLeft:"2px"}}/></Button>}
+  >Connected! <img src={wallet} style={{width:"25px",hieght:"25px",paddingLeft:"2px"}}/></Button> : <Button onClick={connect} margin={2}
+  colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+    background: "white",
+    color: "teal",
+  }}
+  >Connect With Wallet<img src={wallet} style={{width:"25px",hieght:"25px",paddingLeft:"2px"}}/></Button>}
   <Button colorScheme='teal' margin={2} boxShadow="base" colorScheme="teal"  _hover={{
     background: "white",
     color: "teal",

@@ -30,5 +30,13 @@ export const rinkebyList = [
       "decimals": 18,
       "chainId": 4,
       "logoURI": "ipfs://QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg"
+    },
+    {
+      "name": "Chainlink",
+      "address": "0x01BE23585060835E02B77ef475b0Cc51aA1e0709",
+      "symbol": "LINK",
+      "decimals": 18,
+      "chainId": 4,
+      "logoURI": "ipfs://QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg"
     }
   ]

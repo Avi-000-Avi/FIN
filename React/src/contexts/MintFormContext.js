@@ -4,8 +4,8 @@ export function MintFormProvider(props) {
 
 
   const [mintForm, setMintForm] = useState({
-    holdToken:'0x6B175474E89094C44Da98b954EedeAC495271d0F',
-    collateralToken:'0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+    holdToken:'0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+    collateralToken:'0xc778417E063141139Fce010982780140Aa0cD5Ab',
     amount:1,
     swapOnMint: false,
     stopLoss: 0,
@@ -13,8 +13,8 @@ export function MintFormProvider(props) {
   })
 
   const [tokenSymbols, setTokenSymbols] = useState({
-    holdToken:'UNI',
-    collateralToken:'ETH'
+    holdToken:'LINK',
+    collateralToken:'WETH'
   })
 
   const changeHoldToken = (val) => {
