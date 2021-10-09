@@ -12,7 +12,7 @@ import "@fontsource/aileron";
 
 ReactDOM.render(
   <ChakraProvider theme={theme}>
-  <MoralisProvider appId="4S12Z6OWMk2IkfGcKr712xLVTldKoSt2jM2PXM0T" serverUrl="https://jatfccjcovh3.moralishost.com:2053/server">
+  <MoralisProvider appId="oIWpB36MUQD5pleNzFP7gPRS5CDU103z5iNJ430q" serverUrl="https://z8j0wi86a6ia.moralishost.com:2053/server">
     <Router>
     <App/>
     </Router>

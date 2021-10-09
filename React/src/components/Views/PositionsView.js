@@ -16,6 +16,7 @@ import BurnFunction from "../BurnFunction";
 import DexPrice from "../DexPrice";
 import MoralisGetNFT from "../MoralisGetNFT";
 import useTokenList from "../../hook/useTokenList";
+import {rinkebyList} from "../../assets/rinkebyList";
 
 export default function PositionsView() {
   const {
@@ -26,9 +27,10 @@ export default function PositionsView() {
     contractAddress,
   } = useContext(ContractContext);
 
-  const tokenList = useTokenList(
-    "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
-  );
+  // const tokenList = useTokenList(
+  //   "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
+  // );
+  const tokenList = rinkebyList
 
   console.log(tokenList)
 
@@ -54,6 +56,8 @@ export default function PositionsView() {
           for (let i = 0; i < tokenIds.length; i++) {
             let position = await signedContract.getPosition(tokenIds[i]);
 
+            console.log(position)
+
             let token = tokenList.filter(token => token.address == position.fromToken.toString())
             let recieveToken = tokenList.filter(token => token.address == position.toToken.toString())
 
@@ -74,6 +78,7 @@ export default function PositionsView() {
                 }),
                 maxPrice: position.takeProfit.toString(),
                 minPrice: position.stopLoss.toString(),
+                inputTokenAddress: position.fromToken.toString()
               });
             }
           }
@@ -112,13 +117,13 @@ export default function PositionsView() {
         <Tbody>
           {positionData.map((position) => (
             <Tr>
-              <Td>{position.id}convert</Td>
-              <Td>{position.inputToken}convert</Td>
-              <Td>{position.recieveToken}convert</Td>
-              <Td><DexPrice inputToken={position.inputToken} /> convert</Td>
-              <Td isNumeric>{position.amount}convert</Td>
-              <Td isNumeric>{position.maxPrice}convert</Td>
-              <Td isNumeric>{position.minPrice}convert</Td>
+              <Td>{position.id}</Td>
+              <Td>{position.inputToken}</Td>
+              <Td>{position.recieveToken}</Td>
+              <Td><DexPrice inputToken={position.inputTokenAddress} /> </Td>
+              <Td isNumeric>{position.amount}</Td>
+              <Td isNumeric>{position.maxPrice}</Td>
+              <Td isNumeric>{position.minPrice}</Td>
               <Td isNumeric>
                 <BurnFunction tokenId={position.id} />
               </Td>

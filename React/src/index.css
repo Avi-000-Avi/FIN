@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+select {
+  position: relative;
+}
+
+/* Style by class. Effects the text of the contained options. */
+.selectText {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: #fff;
+}
+
+/* Style by id. Effects position of the select drop down. */
+#styledSelect {
+  left: 100px;
+}

@@ -23,6 +23,7 @@ import {
   SliderThumb,
   SliderFilledTrack,
   Box,
+  Container,
   Image
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -41,13 +42,13 @@ import Transaction from "./Transaction/Transaction";
 
 const MintFormDetails = (props) => {
 
-  // const tokenList = rinkebyList
-  // const rinkebyLinkAddress = '0x01be23585060835e02b77ef475b0cc51aa1e0709'
- const uniAddress = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
+  const tokenList = rinkebyList
+ const rinkebyLinkAddress = '0x01be23585060835e02b77ef475b0cc51aa1e0709'
+// const uniAddress = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 
-  const tokenList = useTokenList(
-    "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
-  );
+  // const tokenList = useTokenList(
+  //   "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
+  // );
 
   console.log(tokenList)
 
@@ -60,7 +61,8 @@ const MintFormDetails = (props) => {
     changeAmount,
     changeStopLoss,
     changeTakeProfit,
-    toggleSwapOnMint
+    toggleSwapOnMint,
+    tokenSymbols
   } = useContext(MintFormContext);
 
   const [holdcoinImage, setholdcoinImage] = useState("")
@@ -68,16 +70,42 @@ const MintFormDetails = (props) => {
   
   useEffect(()=>{
 
+    if(rinkebyList) {
+
+    const tokenSymbol = tokenList.find(token => token.symbol == tokenSymbols.holdToken)
+    console.log(tokenSymbol.symbol.toLowerCase(), tokenSymbols.holdToken)
+
+    if(tokenSymbol){
+      const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/${tokenSymbol.symbol.toLowerCase()}`)
+.then(res => setholdcoinImage(res.data.image.thumb))
+    }}else {
+
+    
+
     const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
   .then(res => setholdcoinImage(res.data.image.thumb))
+    }
 
 
-  },[mintForm.holdToken])
+
+} ,[mintForm.holdToken])
 
   useEffect(()=>{
 
-  const grabcollateralCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
-  .then(res => setcollateralcoinImage(res.data.image.thumb))
+    try{
+      const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
+    .then(res => setholdcoinImage(res.data.image.thumb))}
+    catch(error){
+      console.log(error)
+  
+      for(const token of tokenList){
+        if (token.symbol == tokenSymbols.collateralToken ){
+          const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/${token.symbol}`)
+    .then(res => setholdcoinImage(res.data.image.thumb))
+        }
+      }
+  
+    }
 
   if (!collateralcoinImage){
     setcollateralcoinImage("https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880")
@@ -92,10 +120,11 @@ const MintFormDetails = (props) => {
 
 
   return (
+    <Container  p={0} boxShadow="base" backgroundColor="gray.800" borderRadius="10">
     <VStack w="full" h="half" p={10} spacing={10} alignItems="flex-start" > 
       <DexPrice inputToken={mintForm.holdToken}/>
 
-      <Text  fontSize="2xl">Set Your Deposit Token</Text>
+      <Text  fontSize="xl">Set Your Deposit Token</Text>
       <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
 
     
@@ -106,14 +135,14 @@ const MintFormDetails = (props) => {
               <Image src={holdcoinImage} p ={2}/>
             </GridItem>
             <GridItem colSpan={1}>
-              <Select onChange={changeHoldToken}>
+              <Select variant='outline'  onChange={changeHoldToken}>
 
-              <option value={[uniAddress,'UNI']}>
-                    {"UNI"}
+              <option  value={[rinkebyLinkAddress,'LINK']}>
+                    {"LINK"}
                   </option>
 
                 {tokenList.map((token, id) => (
-                  <option value={[token.address,token.symbol]} key={id}>
+                  <option  value={[token.address,token.symbol]} key={id}>
                     {token.symbol}
                   </option>
                 ))}
@@ -130,10 +159,11 @@ const MintFormDetails = (props) => {
             >
               <NumberInputField value={mintForm.amount} />
             </NumberInput>
+            <MintFunction />
           </Flex>
         </GridItem>
 
-        <Text  fontSize="2xl">Set Your Recieve Token</Text>
+        <Text  fontSize="xl">Set Your Recieve Token</Text>
 
         <GridItem colSpan={2}>
           <Flex spacing={30}>
@@ -145,15 +175,15 @@ const MintFormDetails = (props) => {
             
 
             <GridItem colSpan={1}>
-              <Select onChange={changeCollateralToken}>
+              <Select className={'selectText'} onChange={changeCollateralToken}>
 
-              <option value={["0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",'ETH']}>
+              <option className={'selectText'} value={["0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",'ETH']}>
                     {"ETH"}
                   </option>
 
 
                 {tokenList.map((token, id) => (
-                  <option value={[token.address,token.symbol]} key={id}>
+                  <option className={'selectText'} value={[token.address,token.symbol]} key={id}>
                     {token.symbol}
                   </option>
                 ))}
@@ -194,15 +224,12 @@ min={0}
           </Flex>
         </GridItem>
 
-        <GridItem colSpan={2}>
-          <MintFunction />
-        </GridItem>
-        <GridItem></GridItem>
       </SimpleGrid>
       <Flex>
 
       </Flex>
     </VStack>
+    </Container>
   );
 };
 

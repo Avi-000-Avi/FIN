@@ -40,7 +40,7 @@ async function main() {
 //     parameters[name] = argv[long] || argv[short];
 //   });
 // TOKEN AND WHALE NOT BEING PARSED PROPERLY SO HAVE TO HARD CODE
-  const token = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+  const token = "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2"
   const address = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
   //parameters.address; 
   const whale = '0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8';

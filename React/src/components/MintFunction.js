@@ -39,6 +39,7 @@ export default function MintFunction() {
       .catch((e)=>window.alert(e.message))
 
       const tx = await mintTx.wait()
+      .catch((e)=>window.alert(e.message))
 
 
       if(tx){
