@@ -3,7 +3,7 @@ name: My Skynet Homescreen
 on:
   pull_request:
   push:
-    branches: [master]
+    branches: [roland]
 
 jobs:
   build:
@@ -23,6 +23,10 @@ jobs:
         run: yarn compile
         working-directory: .
 
+      - name: Copy PositionManager ABI for webapp
+        run: echo "export const abi = $(cat artifacts/contracts/PositionManager.sol/PositionManager.json)" > React/src/abi/abi.js
+        working-directory: .
+
       - name: Install react dependencies
         run: yarn install
         working-directory: ./React
@@ -30,6 +34,8 @@ jobs:
       - name: Build webapp
         run: yarn build
         working-directory: ./React
+        env:
+          CI: ""
 
       - name: Deploy to Skynet
         uses: SkynetLabs/deploy-to-skynet-action@v2
@@ -38,3 +44,4 @@ jobs:
           upload-dir: ./React/build
           github-token: ${{ secrets.GITHUB_TOKEN }}
           registry-seed: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.REGISTRY_SEED || '' }}
+          try-files: index.html /index.html
