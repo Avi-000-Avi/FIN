@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 const tokenAddress = "0x514910771af9ca656af840dff83e8264ecf986ca" //LINK
 const whaleAddress = "0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503" //LINK team wallet
 const userAddress  = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" //My wallet
-const amount       = "100";
+const amount       = "1000";
 
 const ERC20_ABI = [
     // Some details about the token
