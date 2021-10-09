@@ -39,13 +39,13 @@ export default function MintFunction() {
       })
       .catch((e)=>window.alert(e.message))
 
-      const tx = await mintTx.wait()
-      .catch((e)=>window.alert(e.message))
+      // const tx = await mintTx.wait()
+      // .catch((e)=>window.alert(e.message))
 
 
-      if(tx){
-        window.alert(`Transaction confirmed! See TxID here: https://rinkeby.etherscan.io/tx/${tx.transactionHash}`)
-      }
+      // if(tx){
+      //   window.alert(`Transaction confirmed! See TxID here: https://rinkeby.etherscan.io/tx/${tx.transactionHash}`)
+      // }
 
 
      

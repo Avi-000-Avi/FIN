@@ -49,13 +49,13 @@ import Transaction from "./Transaction/Transaction";
 
 const MintFormDetails = (props) => {
 
-  const tokenList = rinkebyList
- const rinkebyLinkAddress = '0x01be23585060835e02b77ef475b0cc51aa1e0709'
-// const uniAddress = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
+//   const tokenList = rinkebyList
+//  const rinkebyLinkAddress = '0x01be23585060835e02b77ef475b0cc51aa1e0709'
+ const uniAddress = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 
-  // const tokenList = useTokenList(
-  //   "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
-  // );
+  const tokenList = useTokenList(
+    "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
+  );
 
   console.log(tokenList)
 
@@ -77,33 +77,35 @@ const MintFormDetails = (props) => {
   
   useEffect(()=>{
 
-    if(rinkebyList) {
+    //SET TO RINKEBY LIST IF USING RINKEBY
 
-    const token = tokenList.find(token => token.symbol == tokenSymbols.holdToken)
-    console.log(token.symbol)
+    // if(rinkebyList) {
+
+    // const token = tokenList.find(token => token.symbol == tokenSymbols.holdToken)
+    // console.log(token.symbol)
     
-    switch(token.symbol) {
-      case 'DAI':
-        setholdcoinImage(daiLogo)
-        break;
-      case 'WETH':
-        setholdcoinImage(wethLogo)
-        break;
-        case 'LINK':
-          setholdcoinImage(linkLogo)
-          break;
-          case 'UNI':
-            setholdcoinImage(uniLogo)
-            break;
-            case 'MKR':
-              setholdcoinImage(makerLogo)
-              break;        
+    // switch(token.symbol) {
+    //   case 'DAI':
+    //     setholdcoinImage(daiLogo)
+    //     break;
+    //   case 'WETH':
+    //     setholdcoinImage(wethLogo)
+    //     break;
+    //     case 'LINK':
+    //       setholdcoinImage(linkLogo)
+    //       break;
+    //       case 'UNI':
+    //         setholdcoinImage(uniLogo)
+    //         break;
+    //         case 'MKR':
+    //           setholdcoinImage(makerLogo)
+    //           break;        
         
-      default:
-        setholdcoinImage('')
-    }
-    }
-    if(!rinkebyList){
+    //   default:
+    //     setholdcoinImage('')
+    // }
+    // }
+    if(true){
     const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
     .then(res => setholdcoinImage(res.data.image.thumb))
 }
@@ -114,40 +116,42 @@ const MintFormDetails = (props) => {
 
   useEffect(()=>{
 
-    if(rinkebyList) {
-      console.log(tokenSymbols.collateralToken)
+    //SET TO RINKEBY LIST IF USING RINKEBY
 
-      const token = tokenList.find(token => token.symbol == tokenSymbols.collateralToken)
+    // if(rinkebyList) {
+    //   console.log(tokenSymbols.collateralToken)
+
+    //   const token = tokenList.find(token => token.symbol == tokenSymbols.collateralToken)
       
-      switch(token.symbol) {
-        case 'DAI':
-          setcollateralcoinImage(daiLogo)
-          break;
-        case 'WETH':
-          setcollateralcoinImage(wethLogo)
-          break;
-          case 'LINK':
-            setcollateralcoinImage(linkLogo)
-            break;
-            case 'UNI':
-              setcollateralcoinImage(uniLogo)
-              break;
-              case 'MKR':
-                setcollateralcoinImage(makerLogo)
-                break;
-                case 'ETH':
-                  setcollateralcoinImage(ethLogo)
-                  break;             
+    //   switch(token.symbol) {
+    //     case 'DAI':
+    //       setcollateralcoinImage(daiLogo)
+    //       break;
+    //     case 'WETH':
+    //       setcollateralcoinImage(wethLogo)
+    //       break;
+    //       case 'LINK':
+    //         setcollateralcoinImage(linkLogo)
+    //         break;
+    //         case 'UNI':
+    //           setcollateralcoinImage(uniLogo)
+    //           break;
+    //           case 'MKR':
+    //             setcollateralcoinImage(makerLogo)
+    //             break;
+    //             case 'ETH':
+    //               setcollateralcoinImage(ethLogo)
+    //               break;             
           
-        default:
-          setholdcoinImage('')
-      }
-      }
+    //     default:
+    //       setholdcoinImage('')
+    //   }
+    //   }
 
 
-      if(!rinkebyList){
+      if(true){
         const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
-        .then(res => setholdcoinImage(res.data.image.thumb))
+        .then(res => setcollateralcoinImage(res.data.image.thumb))
     }
 
 
@@ -180,9 +184,7 @@ const MintFormDetails = (props) => {
             <GridItem colSpan={1}>
               <Select className={'selectText'} variant='outline'   onChange={changeHoldToken}>
 
-              <option className={'selectText'} value={[rinkebyLinkAddress,'LINK']}>
-                    {"LINK"}
-                  </option>
+  
 
                 {tokenList.map((token, id) => (
                   <option className={'selectText'} value={[token.address,token.symbol]} key={id}>
@@ -220,9 +222,7 @@ const MintFormDetails = (props) => {
             <GridItem colSpan={1}>
               <Select  className={'selectText'} onChange={changeCollateralToken}>
 
-              <option className={'selectText'} value={["0xc778417E063141139Fce010982780140Aa0cD5Ab",'WETH']}>
-                    {"WETH"}
-                  </option>
+
 
 
                 {tokenList.map((token, id) => (

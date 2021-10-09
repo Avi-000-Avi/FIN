@@ -27,12 +27,11 @@ export default function PositionsView() {
     contractAddress,
   } = useContext(ContractContext);
 
-  // const tokenList = useTokenList(
-  //   "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
-  // );
-  const tokenList = rinkebyList
+  const tokenList = useTokenList(
+    "https://gateway.ipfs.io/ipns/tokens.uniswap.org"
+  );
+  // const tokenList = rinkebyList
 
-  console.log(tokenList)
 
   const [tokenIds, setTokenIds] = useState([]);
   const [positionData, setPositionData] = useState([]);

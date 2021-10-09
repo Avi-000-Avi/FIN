@@ -10,47 +10,47 @@ const MANDATORY_PARAMETERS = Object.freeze([
 ]);
 
 async function main() {
-  const argv = parseArgs(process.argv.slice(2), {
-    string: ["address", "a", "amount", "q"],
-  });
-  console.log(argv);
+  // const argv = parseArgs(process.argv.slice(2), {
+  //   string: ["address", "a", "amount", "q"],
+  // });
+  // console.log(argv);
 
-  const parametersAreOk = MANDATORY_PARAMETERS.every((parameterTuple) => {
-    const [_name, [long, short]] = parameterTuple;
-    return long in argv || short in argv;
-  });
+  // const parametersAreOk = MANDATORY_PARAMETERS.every((parameterTuple) => {
+  //   const [_name, [long, short]] = parameterTuple;
+  //   return long in argv || short in argv;
+  // });
 
-  if (!parametersAreOk) {
-    console.log(`
-      Missing mandatory parameter!
+  // if (!parametersAreOk) {
+  //   console.log(`
+  //     Missing mandatory parameter!
 
-      Usage:
+  //     Usage:
 
-        yarn fund-wallet --token <TOKEN ADDRESS> --wallet <WALLET ADDRESS> --amount <AMOUNT>
+  //       yarn fund-wallet --token <TOKEN ADDRESS> --wallet <WALLET ADDRESS> --amount <AMOUNT>
 
-      Parameters:
+  //     Parameters:
 
-        --token     -m : ERC20 token (e.g. DAI 0x...)
+  //       --token     -m : ERC20 token (e.g. DAI 0x...)
 
-        --address   -a : Ethereum wallet address
+  //       --address   -a : Ethereum wallet address
 
-        --whale     -w : the whale address to grab tokens from
+  //       --whale     -w : the whale address to grab tokens from
 
-        --amount    -q : quantity of tokens to send to the desired wallet
-    `);
-  }
+  //       --amount    -q : quantity of tokens to send to the desired wallet
+  //   `);
+  // }
 
-  const parameters = {};
+  // const parameters = {};
 
-  MANDATORY_PARAMETERS.forEach((param) => {
-    const [name, [long, short]] = param;
-    parameters[name] = argv[long] || argv[short];
-  });
+  // MANDATORY_PARAMETERS.forEach((param) => {
+  //   const [name, [long, short]] = param;
+  //   parameters[name] = argv[long] || argv[short];
+  // });
 
-  const token = parameters.token;
-  const address = parameters.address;
-  const whale = parameters.whale;
-  const amount = parameters.amount;
+  const token = '0x514910771AF9Ca656af840dff83E8264EcF986CA';
+  const address = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+  const whale = '0x6555e1CC97d3cbA6eAddebBCD7Ca51d75771e0B8';
+  const amount = 50;
 
   const tokenInstance = await ethers.getContractAt(
     ERC20_ABI,

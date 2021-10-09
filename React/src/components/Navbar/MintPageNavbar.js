@@ -45,7 +45,7 @@ export default function MintPageNavbar(props) {
     color: "teal",
   }}
   >Connect With Wallet<img src={wallet} style={{width:"25px",hieght:"25px",paddingLeft:"2px"}}/></Button>}
-  <Button colorScheme='teal' margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+  <Button colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
     background: "white",
     color: "teal",
   }} > <Link to="/positions">Positions</Link> </Button>
