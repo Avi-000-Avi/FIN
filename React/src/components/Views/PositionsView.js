@@ -62,8 +62,7 @@ export default function PositionsView() {
             let recieveToken = tokenList.filter(token => token.address == position.toToken.toString())
 
 
-
-            console.log(token)
+            console.log(recieveToken)
 
             if (
                position.fromToken.toString() !== "0x0000000000000000000000000000000000000000"
