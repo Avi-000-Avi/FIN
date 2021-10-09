@@ -2,7 +2,7 @@ import React,{Fragment, useContext, useState} from 'react'
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Button } from '@chakra-ui/button';
-import { Table, Thead, Tr, Th, Td, Tbody } from '@chakra-ui/table';
+import { Table, Thead, Tr, Th, Td, Tbody,Container } from '@chakra-ui/react';
 
 import { useMoralis } from "react-moralis";
 import { useMoralisWeb3Api } from "react-moralis";
@@ -52,11 +52,14 @@ export default function MoralisGetNFT() {
 
 
     return (
-    <Fragment>
+    <Container maxW="1400px" maxH="1000px" color="white" boxShadow="base" backgroundColor="#232945">
         <FormControl id="address">
         <FormLabel>Get Positions from Address with Moralis API (Rinkeby)</FormLabel>
         <Input width='500px' onChange={changeAddress} value={address} type="text" />
-        <Button onClick={getPositionsFromAddress}> Search </Button>
+        <Button onClick={getPositionsFromAddress} colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+    background: "white",
+    color: "teal",
+  }}> Search </Button>
       </FormControl>
 
       <Table size="sm">
@@ -80,6 +83,6 @@ export default function MoralisGetNFT() {
         </Tbody>
       </Table>
 
-      </Fragment>
+      </Container>
     )
 }
