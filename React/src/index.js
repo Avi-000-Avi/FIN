@@ -8,6 +8,13 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { ChakraProvider} from "@chakra-ui/react"
 import { extendTheme } from "@chakra-ui/react"
 import "@fontsource/aileron";
+import { Button } from '@chakra-ui/button';
+
+const config = {
+  initialColorMode: "dark",
+  useSystemColorMode: false,
+}
+
 
 const theme = extendTheme({
   colors: {
@@ -17,9 +24,19 @@ const theme = extendTheme({
       300: "#23e8a0",
       400: "#33a4f3",
       500: "#0fb5dc",
+      600: "#d8d8d8",
     },
   },
-})
+  global: {
+    body: {
+      bg: "#c19161f",
+      color: "white",
+    },
+},
+
+},config
+)
+
 
 
 ReactDOM.render(

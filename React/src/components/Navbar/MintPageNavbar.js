@@ -25,10 +25,10 @@ export default function MintPageNavbar(props) {
    
     return (
       
-<Flex  p={5}>
-  <Flex margin={2} spacing={10}>
+<Flex bg="brand.100"  p={5}>
+  <Flex  margin={2} spacing={10}>
   <Image src={logo5} />
-  <Heading size="m" >Financially Intelligent NFTs</Heading> 
+  <Heading  size="m" >Financially Intelligent NFTs</Heading> 
   </Flex>
 
   <Spacer />

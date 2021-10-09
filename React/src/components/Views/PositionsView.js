@@ -38,6 +38,9 @@ export default function PositionsView() {
   const [positionData, setPositionData] = useState([]);
 
   const showPositions = async () => {
+
+    try {
+
     if (stateUserAddress) {
       const getOwnedPositions = async () => {
         const positions = await signedContract.getOwnedPositions();
@@ -86,6 +89,10 @@ export default function PositionsView() {
         })();
       };
       getOwnedPositions();
+    }
+
+  }catch(e){
+      window.alert('error',e)
     }
   };
 

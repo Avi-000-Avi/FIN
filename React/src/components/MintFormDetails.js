@@ -178,14 +178,14 @@ const MintFormDetails = (props) => {
               <Image src={holdcoinImage} p ={2}/>
             </GridItem>
             <GridItem colSpan={1}>
-              <Select variant='outline'  onChange={changeHoldToken}>
+              <Select className={'selectText'} variant='outline'   onChange={changeHoldToken}>
 
-              <option  value={[rinkebyLinkAddress,'LINK']}>
+              <option className={'selectText'} value={[rinkebyLinkAddress,'LINK']}>
                     {"LINK"}
                   </option>
 
                 {tokenList.map((token, id) => (
-                  <option  value={[token.address,token.symbol]} key={id}>
+                  <option className={'selectText'} value={[token.address,token.symbol]} key={id}>
                     {token.symbol}
                   </option>
                 ))}
@@ -218,7 +218,7 @@ const MintFormDetails = (props) => {
             
 
             <GridItem colSpan={1}>
-              <Select className={'selectText'} onChange={changeCollateralToken}>
+              <Select  className={'selectText'} onChange={changeCollateralToken}>
 
               <option className={'selectText'} value={["0xc778417E063141139Fce010982780140Aa0cD5Ab",'WETH']}>
                     {"WETH"}
@@ -237,7 +237,7 @@ const MintFormDetails = (props) => {
 
               
 
-            <Text p={2}>Max Price</Text>
+            <Text p={2}>Max</Text>
 
             <NumberInput
               onChange={changeTakeProfit}
@@ -249,7 +249,7 @@ const MintFormDetails = (props) => {
               <NumberInputField value={mintForm.takeProfit} />
             </NumberInput>
 
-            <Text  fontSize="1xl" p ={2}>Min Price</Text>
+            <Text  fontSize="1xl" p ={2}>Min</Text>
 
 <NumberInput
 onChange={changeStopLoss}
