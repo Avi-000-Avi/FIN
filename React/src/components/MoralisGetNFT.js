@@ -47,10 +47,6 @@ export default function MoralisGetNFT() {
 
   }
 
-
-  
-
-
     return (
     <Container maxW="1400px" maxH="1000px" color="white" boxShadow="base" backgroundColor="#232945">
         <FormControl id="address">

@@ -1,28 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
-  FormControl,
-  FormLabel,
-  Input,
   VStack,
-  Heading,
   Text,
   SimpleGrid,
   GridItem,
   Select,
-  FormHelperText,
-  Checkbox,
-  Button,
   Flex,
   NumberInput,
   NumberInputField,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  NumberInputStepper,
-  Slider,
-  SliderTrack,
-  SliderThumb,
-  SliderFilledTrack,
-  Box,
   Image
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -40,9 +25,6 @@ import {rinkebyList} from "../assets/rinkebyList";
 import Transaction from "./Transaction/Transaction";
 
 const MintFormDetails = (props) => {
-
-  // const tokenList = rinkebyList
-  // const rinkebyLinkAddress = '0x01be23585060835e02b77ef475b0cc51aa1e0709'
  const uniAddress = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 
   const tokenList = useTokenList(
@@ -106,7 +88,7 @@ const MintFormDetails = (props) => {
               <Image src={holdcoinImage} p ={2}/>
             </GridItem>
             <GridItem colSpan={1}>
-              <Select onChange={changeHoldToken}>
+              <Select onChange={changeHoldToken} variant="outline" borderRadius="5px"> 
 
               <option value={[uniAddress,'UNI']}>
                     {"UNI"}
@@ -120,11 +102,11 @@ const MintFormDetails = (props) => {
               </Select>
             </GridItem>
 
+                  
             <NumberInput
               onChange={changeAmount}
               maxW="100px"
               paddingLeft='1rem'
-              mr="2rem"
               defaultValue={0}
               min={0}
             >
@@ -141,11 +123,8 @@ const MintFormDetails = (props) => {
           <Image src={collateralcoinImage} p={2}/>
             </GridItem>
 
-            
-            
-
             <GridItem colSpan={1}>
-              <Select onChange={changeCollateralToken}>
+              <Select onChange={changeCollateralToken} variant="outline" borderRadius="5px">
 
               <option value={["0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",'ETH']}>
                     {"ETH"}

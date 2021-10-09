@@ -72,7 +72,7 @@ import {
           },
         },
         Input: { ...inputSelectStyles },
-        
+        Select: { ...inputSelectStyles },
         Checkbox: {
           baseStyle: {
             control: {
