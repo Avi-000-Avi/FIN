@@ -15,6 +15,7 @@ import MintFormDetails from "../MintFormDetails";
 import MintPageNavbar from "../Navbar/MintPageNavbar";
 import TradingViewComponent from "../TradingViewComponent";
 import Vector from "../../assets/Vector.png";
+import backgroundLines from "../../assets/hero-bg.png";
 
 export default function MintPageView(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,14 +24,15 @@ export default function MintPageView(props) {
   const close = () => setIsOpen(false);
 
   return (
-    <Container maxW="container.xl" p={0} boxShadow="base" p ={10} backgroundColor="#232945" borderRadius="10">
+    <Container maxW="1400px" maxH="1000px" p={0} boxShadow="base" backgroundColor="#232945" borderRadius="10">
             
             <Flex py={[0, 10, 20]}
-      direction={{ base: 'column-reverse', md: 'row' }}>
+      direction={{ base: 'column-reverse', md: 'row' }} p ={10}>
             <MintFormDetails /> 
      <TradingViewComponent firstFieldRef={firstFieldRef} />
      </Flex>
-     <img src ={Vector}/>
+     <img src ={backgroundLines} maxW="1400px"/>
+     
     </Container>
   );
 }

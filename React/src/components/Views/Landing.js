@@ -6,7 +6,7 @@ import { Container, VStack } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import { Link } from "@chakra-ui/react"
 import enterAppButton from '../../assets/enterAppButton.svg'
-import cylinder from "../../assets/cylinder.png";
+import cylinder from "../../assets/cylinder.svg";
 
 
 
@@ -16,8 +16,8 @@ export default function Landing() {
 
         return(
             <VStack maxW='2100px'  centerContent backgroundColor='#595959'>
-            <Image src ={cylinder}/>
-           <Button bottom={'450px'} right={'500px'} backgroundColor="white" borderRadius="10"	> <a href='/app'> Enter App</a>  </Button>
+            <Image src ={cylinder} h="75%" w=""/>
+           <Button bottom={'450px'} right={'500px'} backgroundColor="white" borderRadius="10"	color="black"> <a href='/app'> Enter App</a>  </Button>
            </VStack>
         )
             
