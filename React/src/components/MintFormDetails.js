@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, Fragment } from "react";
 import {
   FormControl,
   FormLabel,
@@ -27,6 +27,13 @@ import {
   Image
 } from "@chakra-ui/react";
 import axios from "axios";
+
+import daiLogo from '../assets/logos/daiLogo.png'
+import ethLogo from '../assets/logos/ethLogo.png'
+import linkLogo from '../assets/logos/linkLogo.png'
+import makerLogo from '../assets/logos/makerLogo.png'
+import uniLogo from '../assets/logos/uniLogo.png'
+import wethLogo from '../assets/logos/wethLogo.png'
 
 
 import { ContractContext } from "../contexts/ContractContext";
@@ -72,19 +79,34 @@ const MintFormDetails = (props) => {
 
     if(rinkebyList) {
 
-    const tokenSymbol = tokenList.find(token => token.symbol == tokenSymbols.holdToken)
-    console.log(tokenSymbol.symbol.toLowerCase(), tokenSymbols.holdToken)
-
-    if(tokenSymbol){
-      const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/${tokenSymbol.symbol.toLowerCase()}`)
-.then(res => setholdcoinImage(res.data.image.thumb))
-    }}else {
-
+    const token = tokenList.find(token => token.symbol == tokenSymbols.holdToken)
+    console.log(token.symbol)
     
-
-    const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
-  .then(res => setholdcoinImage(res.data.image.thumb))
+    switch(token.symbol) {
+      case 'DAI':
+        setholdcoinImage(daiLogo)
+        break;
+      case 'WETH':
+        setholdcoinImage(wethLogo)
+        break;
+        case 'LINK':
+          setholdcoinImage(linkLogo)
+          break;
+          case 'UNI':
+            setholdcoinImage(uniLogo)
+            break;
+            case 'MKR':
+              setholdcoinImage(makerLogo)
+              break;        
+        
+      default:
+        setholdcoinImage('')
     }
+    }
+    if(!rinkebyList){
+    const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
+    .then(res => setholdcoinImage(res.data.image.thumb))
+}
 
 
 
@@ -92,26 +114,45 @@ const MintFormDetails = (props) => {
 
   useEffect(()=>{
 
-    try{
-      const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
-    .then(res => setholdcoinImage(res.data.image.thumb))}
-    catch(error){
-      console.log(error)
-  
-      for(const token of tokenList){
-        if (token.symbol == tokenSymbols.collateralToken ){
-          const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/${token.symbol}`)
-    .then(res => setholdcoinImage(res.data.image.thumb))
-        }
+    if(rinkebyList) {
+      console.log(tokenSymbols.collateralToken)
+
+      const token = tokenList.find(token => token.symbol == tokenSymbols.collateralToken)
+      
+      switch(token.symbol) {
+        case 'DAI':
+          setcollateralcoinImage(daiLogo)
+          break;
+        case 'WETH':
+          setcollateralcoinImage(wethLogo)
+          break;
+          case 'LINK':
+            setcollateralcoinImage(linkLogo)
+            break;
+            case 'UNI':
+              setcollateralcoinImage(uniLogo)
+              break;
+              case 'MKR':
+                setcollateralcoinImage(makerLogo)
+                break;
+                case 'ETH':
+                  setcollateralcoinImage(ethLogo)
+                  break;             
+          
+        default:
+          setholdcoinImage('')
       }
-  
+      }
+
+
+      if(!rinkebyList){
+        const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
+        .then(res => setholdcoinImage(res.data.image.thumb))
     }
 
-  if (!collateralcoinImage){
-    setcollateralcoinImage("https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880")
-  }
 
-  },[ mintForm.collateralToken])
+
+  },[mintForm.collateralToken])
 
 
 
@@ -120,6 +161,8 @@ const MintFormDetails = (props) => {
 
 
   return (
+    <Fragment>
+      
     <Container  p={0} boxShadow="base" backgroundColor="gray.800" borderRadius="10">
     <VStack w="full" h="half" p={10} spacing={10} alignItems="flex-start" > 
       <DexPrice inputToken={mintForm.holdToken}/>
@@ -177,8 +220,8 @@ const MintFormDetails = (props) => {
             <GridItem colSpan={1}>
               <Select className={'selectText'} onChange={changeCollateralToken}>
 
-              <option className={'selectText'} value={["0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",'ETH']}>
-                    {"ETH"}
+              <option className={'selectText'} value={["0xc778417E063141139Fce010982780140Aa0cD5Ab",'WETH']}>
+                    {"WETH"}
                   </option>
 
 
@@ -230,6 +273,7 @@ min={0}
       </Flex>
     </VStack>
     </Container>
+    </Fragment>
   );
 };
 

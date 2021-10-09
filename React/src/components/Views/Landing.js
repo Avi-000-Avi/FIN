@@ -21,7 +21,7 @@ export default function Landing() {
 <Container maxW='2100px' maxH='500px' centerContent>
            <Image maxW='1550px' maxH='900px' src={landing}/>
            <Button marginBottom={6} bottom={'450px'} right={'500px'} colorScheme=""> <a href='/app'>  <Image src={viewDemoButton}></Image> </a>  </Button>
-           <Button bottom={'450px'} right={'500px'} colorScheme=""> <a href='/app'>  <Image src={joinDiscordButton}></Image> </a>  </Button>
+           
             </Container>
             
       
