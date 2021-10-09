@@ -1,0 +1,40 @@
+name: My Skynet Homescreen
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Install contract dependencies
+        run: yarn install
+        working-directory: .
+      
+      - name: Compile contracts
+        run: yarn compile
+        working-directory: .
+
+      - name: Install react dependencies
+        run: yarn install
+        working-directory: ./React
+
+      - name: Build webapp
+        run: yarn build
+        working-directory: ./React
+
+      - name: Deploy to Skynet
+        uses: SkynetLabs/deploy-to-skynet-action@v2
+
+        with:
+          upload-dir: ./React/build
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          registry-seed: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.REGISTRY_SEED || '' }}
