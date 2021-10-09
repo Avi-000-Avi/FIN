@@ -90,13 +90,13 @@ export default function PositionsView() {
   }, [stateUserAddress]);
 
   return (
-    <Container maxW="1400px" maxH="1400px" p={0} boxShadow="base" backgroundColor="#232945" borderRadius="10">
+    <Container maxW="1400px" h="900px" p={0} boxShadow="base" backgroundColor="#232945" borderRadius="10">
       <Button onClick={showPositions} colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
     background: "white",
     color: "teal",
   }} > Show Positions </Button>
   
-      <Container maxW="1400px" maxH="1000px" color="white" boxShadow="base" backgroundColor="#232945" borderRadius="10">
+      <Container maxW="1400px" maxH="1000px" color="white" boxShadow="base" backgroundColor="#232945" borderRadius="10" >
       <Table size="sm">
         <Thead>
           <Tr>
