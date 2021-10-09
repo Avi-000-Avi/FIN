@@ -27,6 +27,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 
+
 import { ContractContext } from "../contexts/ContractContext";
 import { MintFormContext } from "../contexts/MintFormContext";
 
@@ -91,16 +92,10 @@ const MintFormDetails = (props) => {
 
 
   return (
-    <Box marginLeft={'800px'} paddingTop={'200px'} textColor='#4FD1C5'>
-      {stateUserAddress? 
-    <VStack w="full" h="full" p={10} spacing={10} alignItems="flex-start" > 
-
+    <VStack w="full" h="half" p={10} spacing={10} alignItems="flex-start" > 
       <DexPrice inputToken={mintForm.holdToken}/>
 
-      <Text>Set Your Deposit Token</Text>
-     
-
-
+      <Text  fontSize="2xl">Set Your Deposit Token</Text>
       <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
 
     
@@ -108,7 +103,7 @@ const MintFormDetails = (props) => {
           <Flex spacing={30}>
 
           <GridItem colSpan={1}>
-              <Image src={holdcoinImage}/>
+              <Image src={holdcoinImage} p ={2}/>
             </GridItem>
             <GridItem colSpan={1}>
               <Select onChange={changeHoldToken}>
@@ -125,8 +120,6 @@ const MintFormDetails = (props) => {
               </Select>
             </GridItem>
 
-            
-
             <NumberInput
               onChange={changeAmount}
               maxW="100px"
@@ -136,20 +129,16 @@ const MintFormDetails = (props) => {
               min={0}
             >
               <NumberInputField value={mintForm.amount} />
-              <NumberInputStepper >
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
             </NumberInput>
           </Flex>
         </GridItem>
 
-        <Text>Set Your Recieve Token</Text>
+        <Text  fontSize="2xl">Set Your Recieve Token</Text>
 
         <GridItem colSpan={2}>
           <Flex spacing={30}>
           <GridItem colSpan={1}>
-          <Image src={collateralcoinImage}/>
+          <Image src={collateralcoinImage} p={2}/>
             </GridItem>
 
             
@@ -185,13 +174,9 @@ const MintFormDetails = (props) => {
               min={0}
             >
               <NumberInputField value={mintForm.takeProfit} />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
             </NumberInput>
 
-            <Text p={2}>Min Price</Text>
+            <Text  fontSize="1xl" p ={2}>Min Price</Text>
 
 <NumberInput
 onChange={changeStopLoss}
@@ -200,10 +185,6 @@ defaultValue={0}
 min={0}
 >
 <NumberInputField value={mintForm.stopLoss} />
-<NumberInputStepper >
-  <NumberIncrementStepper />
-  <NumberDecrementStepper />
-</NumberInputStepper>
 </NumberInput>
 
 
@@ -218,9 +199,10 @@ min={0}
         </GridItem>
         <GridItem></GridItem>
       </SimpleGrid>
+      <Flex>
+
+      </Flex>
     </VStack>
-    : null}
-    </Box>
   );
 };
 

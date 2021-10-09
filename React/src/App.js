@@ -6,7 +6,9 @@ import Landing from "./components/Views/Landing"
 import MintPageNavbar from "./components/Navbar/MintPageNavbar";
 import MintPageView from "./components/Views/MintPageView";
 import PositionsView from "./components/Views/PositionsView";
-
+import {
+  Container,Flex
+} from "@chakra-ui/react";
 
 //STYLING
 
@@ -14,7 +16,7 @@ import PositionsView from "./components/Views/PositionsView";
 function App() {
 
   return (
-    <Fragment>
+    <div style={{backgroundColor:"#10152C",color:"white"}}>
 
     <ContractProvider>
       <MintFormProvider>
@@ -29,7 +31,7 @@ function App() {
       </MintFormProvider>
     </ContractProvider>
     
-    </Fragment>
+    </div>
   );
 
 }

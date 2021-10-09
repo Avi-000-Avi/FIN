@@ -1,7 +1,7 @@
 import React,{useContext, useState, useEffect, Fragment} from 'react'
 import axios from 'axios';
 import { MintFormContext } from '../contexts/MintFormContext';
-import { Text } from '@chakra-ui/layout';
+import { Text,Heading } from '@chakra-ui/layout';
 
 const DEXGURU_API = process.env.REACT_APP_DEXGURU_API
 
@@ -48,7 +48,7 @@ export default function DexPrice(props) {
     
     return (
         <Fragment>
-           <Text>DEX PRICE: $ {holdTokenPrice}</Text> 
+           <Text fontSize="5xl">DEX PRICE: $ {holdTokenPrice}</Text> 
         </Fragment>
     )
 }

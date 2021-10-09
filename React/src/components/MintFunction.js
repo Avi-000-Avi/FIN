@@ -109,11 +109,14 @@ export default function MintFunction() {
     <div>
 
       {isApproved?
-      <Button size="lg"  colorScheme="blue" onClick={mint}>
+      <Button size="lg"  colorScheme="teal" variant ="outline" onClick={mint}>
       Mint
     </Button>:
 
-<Button size="lg"  colorScheme="blue" onClick={approve}>
+<Button size="lg" boxShadow="2xl" colorScheme="teal"  _hover={{
+    background: "white",
+    color: "teal",
+  }}  onClick={approve}>
         Approve
       </Button>
 

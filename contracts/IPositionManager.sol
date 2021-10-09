@@ -39,8 +39,5 @@ interface IPositionManager is IERC721Metadata, IKeeperInterface {
     event FeeWasUpdated(uint8);
     event PositionWasOpened(Position);
     event PositionWasClosed(Position);
-<<<<<<< HEAD
-=======
     event PositionWasUpdated(Position);
->>>>>>> c918e42e34ded25afdce0ea7af70cdb6cb36b194
 }

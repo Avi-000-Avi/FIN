@@ -5,7 +5,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MoralisProvider } from "react-moralis";
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ChakraProvider, theme } from "@chakra-ui/react"
+import { ChakraProvider} from "@chakra-ui/react"
+import theme from "./theme";
+import "@fontsource/aileron";
+
 
 ReactDOM.render(
   <ChakraProvider theme={theme}>
