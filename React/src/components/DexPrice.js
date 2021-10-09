@@ -14,10 +14,6 @@ export default function DexPrice(props) {
 
     const [holdTokenPrice, setholdTokenPrice] = useState()
     const [collateralTokenPrice, setcollateralTokenPrice] = useState()
-
-    
-    
-
     useEffect(()=>{
 
         if(props.inputToken){
@@ -30,21 +26,9 @@ export default function DexPrice(props) {
             })
             
         }else{
-
-
-    //  axios.get(`https://api.dev.dex.guru/v1/chain/1/tokens/${mintForm.holdToken}/market?api-key=${DEXGURU_API}`)
-    // .then(res => {
-    //     setholdTokenPrice(res.data.price_usd)
-    //     return res
-    // })
-
 }
     
     },[mintForm.holdToken])
-
-   
-
-
     
     return (
         <Fragment>
