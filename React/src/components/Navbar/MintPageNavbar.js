@@ -35,21 +35,21 @@ export default function MintPageNavbar(props) {
 
   <Spacer />
   {stateUserAddress? <Button margin={2}
-  colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+  colorScheme='brand' margin={2} boxShadow="base" colorScheme='brand'  _hover={{
     background: "white",
     color: "teal",
   }}
   >Connected! <img src={wallet} style={{width:"25px",hieght:"25px",paddingLeft:"2px"}}/></Button> : <Button onClick={connect} margin={2}
-  colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+  colorScheme='brand' margin={2} boxShadow="base" colorScheme='brand'  _hover={{
     background: "white",
     color: "teal",
   }}
   >Connect With Wallet<img src={wallet} style={{width:"25px",hieght:"25px",paddingLeft:"2px"}}/></Button>}
-  <Button colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+  <Button colorScheme='brand' margin={2} boxShadow="base" colorScheme='brand'  _hover={{
     background: "white",
     color: "teal",
   }} > <Link to="/positions">Positions</Link> </Button>
-  <Button colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+  <Button colorScheme='brand' margin={2} boxShadow="base" colorScheme='brand'  _hover={{
     background: "white",
     color: "teal",
   }} > <Link to="/app">Mint</Link> </Button>

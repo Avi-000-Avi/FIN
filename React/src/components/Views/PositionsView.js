@@ -101,7 +101,7 @@ export default function PositionsView() {
 
   return (
     <Container maxW="1400px" h="900px" p={0} boxShadow="base" backgroundColor="#232945" borderRadius="10">
-      <Button onClick={showPositions} colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+      <Button onClick={showPositions} colorScheme='mintApprove' margin={2} boxShadow="base"  _hover={{
     background: "white",
     color: "teal",
   }} > Show Positions </Button>
@@ -113,7 +113,7 @@ export default function PositionsView() {
             <Th>Token ID</Th>
             <Th>Input Token</Th>
             <Th>Recieve Token</Th>
-            <Th isNumeric>DEX Price</Th>
+            <Th >DEX Price</Th>
             <Th isNumeric>Amount</Th>
             <Th isNumeric> Max Price </Th>
             <Th isNumeric> Min Price </Th>

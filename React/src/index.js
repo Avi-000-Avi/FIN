@@ -6,14 +6,14 @@ import reportWebVitals from "./reportWebVitals";
 import { MoralisProvider } from "react-moralis";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
-import { extendTheme } from "@chakra-ui/react";
 import "@fontsource/aileron";
-import { Button } from "@chakra-ui/button";
+import { extendTheme } from "@chakra-ui/react"
 
 const config = {
   initialColorMode: "dark",
   useSystemColorMode: false,
 };
+
 
 const theme = extendTheme(
   {
@@ -25,20 +25,21 @@ const theme = extendTheme(
         400: "#33a4f3", 
         500: "#0fb5dc",
         600: "#d8d8d8",
+        700: '#20c0f5'
       },
-    },
-    global: {
-      body: {
-        bg: "#c19161f",
-        color: "white",
+      mintApprove: {
+        500: '#23e8a0'
       },
+      hover: {
+        500: "#aa7cf2"
+      }
     },
     components: {
       Button: {
         baseStyle: {
-          fontWeight: "bold", 
-          colorScheme: "#23e8a0"
-        }
+          fontWeight: "bold",
+          colorScheme:"brand", // Normally, it is "semibold"
+        },
       }
     
     }

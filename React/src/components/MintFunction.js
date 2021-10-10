@@ -39,11 +39,11 @@ export default function MintFunction() {
       })
       .catch((e)=>window.alert(e.message))
 
-      // const tx = await mintTx.wait()
-      // .catch((e)=>window.alert(e.message))
+      //  const tx = await mintTx.wait()
+      // // .catch((e)=>window.alert(e.message))
 
 
-      // if(tx){
+      // if(tx.confirmations ==1){
       //   window.alert(`Transaction confirmed! See TxID here: https://rinkeby.etherscan.io/tx/${tx.transactionHash}`)
       // }
 
@@ -117,11 +117,11 @@ export default function MintFunction() {
     <div>
 
       {isApproved?
-      <Button size="lg"  colorScheme="teal" variant ="outline" onClick={mint}>
+      <Button size="lg" colorScheme='mintApprove' onClick={mint}>
       Mint
     </Button>:
 
-<Button size="lg" boxShadow="2xl" colorScheme="teal"  _hover={{
+<Button size="lg" boxShadow="2xl" colorScheme='mintApprove' _hover={{
     background: "white",
     color: "teal",
   }}  onClick={approve}>

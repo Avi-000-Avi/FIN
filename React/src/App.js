@@ -16,7 +16,7 @@ import {
 function App() {
 
   return (
-    <div style={{backgroundColor:"#10152C",color:"white"}}>
+    <div style={{backgroundColor:"black",color:"white"}}>
 
     <ContractProvider>
       <MintFormProvider>

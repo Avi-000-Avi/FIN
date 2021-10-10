@@ -24,9 +24,12 @@ import {
   SliderFilledTrack,
   Box,
   Container,
-  Image
+  Image,
+  Spacer
 } from "@chakra-ui/react";
 import axios from "axios";
+
+import { useHistory } from 'react-router-dom'
 
 import daiLogo from '../assets/logos/daiLogo.png'
 import ethLogo from '../assets/logos/ethLogo.png'
@@ -48,6 +51,7 @@ import {rinkebyList} from "../assets/rinkebyList";
 import Transaction from "./Transaction/Transaction";
 
 const MintFormDetails = (props) => {
+  const url = window.location.pathname.split('/').pop();
 
 //   const tokenList = rinkebyList
 //  const rinkebyLinkAddress = '0x01be23585060835e02b77ef475b0cc51aa1e0709'
@@ -74,6 +78,20 @@ const MintFormDetails = (props) => {
 
   const [holdcoinImage, setholdcoinImage] = useState("")
   const [collateralcoinImage, setcollateralcoinImage] = useState("")
+
+  const [initialInputDefault, setinitialInputDefault] = useState(
+    {
+      address: mintForm.holdToken,
+      symbol: tokenSymbols.holdToken
+    }
+  )
+  
+  const [initialRecieveDefault, setinitialRecieveDefault] = useState(
+    {
+      address: mintForm.collateralToken,
+      symbol: tokenSymbols.collateralToken
+    }
+  )
   
   useEffect(()=>{
 
@@ -105,14 +123,13 @@ const MintFormDetails = (props) => {
     //     setholdcoinImage('')
     // }
     // }
-    if(true){
     const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.holdToken}`)
     .then(res => setholdcoinImage(res.data.image.thumb))
-}
 
 
 
-} ,[mintForm.holdToken])
+
+} ,[mintForm.holdToken, url])
 
   useEffect(()=>{
 
@@ -149,19 +166,36 @@ const MintFormDetails = (props) => {
     //   }
 
 
-      if(true){
         const grabholdCoinImage = axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${mintForm.collateralToken}`)
         .then(res => setcollateralcoinImage(res.data.image.thumb))
-    }
-
-
-
-  },[mintForm.collateralToken])
-
-
-
-
   
+
+
+
+  },[mintForm.collateralToken, url])
+
+  useEffect(()=>{
+
+
+    setinitialInputDefault(
+      {
+        address: mintForm.holdToken,
+        symbol: tokenSymbols.holdToken
+      }
+    )
+    
+    setinitialRecieveDefault(
+      {
+        address: mintForm.collateralToken,
+        symbol: tokenSymbols.collateralToken
+      }
+    )
+
+
+
+  },[mintForm.holdToken, mintForm.collateralToken])
+
+
 
 
   return (
@@ -170,8 +204,8 @@ const MintFormDetails = (props) => {
     <Container  p={0} boxShadow="base" backgroundColor="gray.800" borderRadius="10">
     <VStack w="full" h="half" p={10} spacing={10} alignItems="flex-start" > 
       <DexPrice inputToken={mintForm.holdToken}/>
+      <Text fontSize="xl">Set Your Deposit Token</Text>
 
-      <Text  fontSize="xl">Set Your Deposit Token</Text>
       <SimpleGrid columns={2} columnGap={3} rowGap={6} w="full">
 
     
@@ -184,7 +218,9 @@ const MintFormDetails = (props) => {
             <GridItem colSpan={1}>
               <Select className={'selectText'} variant='outline'   onChange={changeHoldToken}>
 
-  
+              <option value={[initialInputDefault.address, initialInputDefault.symbol]}>
+                    {initialInputDefault.symbol}
+                  </option>
 
                 {tokenList.map((token, id) => (
                   <option className={'selectText'} value={[token.address,token.symbol]} key={id}>
@@ -193,7 +229,7 @@ const MintFormDetails = (props) => {
                 ))}
               </Select>
             </GridItem>
-
+                  
             <NumberInput
               onChange={changeAmount}
               maxW="100px"
@@ -204,6 +240,7 @@ const MintFormDetails = (props) => {
             >
               <NumberInputField value={mintForm.amount} />
             </NumberInput>
+           
             <MintFunction />
           </Flex>
         </GridItem>
@@ -223,7 +260,9 @@ const MintFormDetails = (props) => {
               <Select  className={'selectText'} onChange={changeCollateralToken}>
 
 
-
+              <option value={[initialRecieveDefault.address, initialRecieveDefault.symbol]}>
+                    {initialRecieveDefault.symbol}
+                  </option>
 
                 {tokenList.map((token, id) => (
                   <option className={'selectText'} value={[token.address,token.symbol]} key={id}>

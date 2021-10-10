@@ -56,7 +56,7 @@ export default function MoralisGetNFT() {
         <FormControl id="address">
         <FormLabel>Get Positions from Address with Moralis API (Rinkeby)</FormLabel>
         <Input width='500px' onChange={changeAddress} value={address} type="text" />
-        <Button onClick={getPositionsFromAddress} colorScheme="teal" margin={2} boxShadow="base" colorScheme="teal"  _hover={{
+        <Button onClick={getPositionsFromAddress} margin={2} boxShadow="base" colorScheme='mintApprove'  _hover={{
     background: "white",
     color: "teal",
   }}> Search </Button>

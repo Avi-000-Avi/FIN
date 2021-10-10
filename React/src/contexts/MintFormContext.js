@@ -2,20 +2,12 @@ import React, {createContext, useEffect, useState } from "react";
 export const MintFormContext = createContext();
 export function MintFormProvider(props) {
 
+  const url = window.location.pathname.split('/').pop();
 
-  const [mintForm, setMintForm] = useState({
-    holdToken:'0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
-    collateralToken:'0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
-    amount:1,
-    swapOnMint: false,
-    stopLoss: 0,
-    takeProfit:0
-  })
 
-  const [tokenSymbols, setTokenSymbols] = useState({
-    holdToken:'AAVE',
-    collateralToken:'AAVE'
-  })
+  const [mintForm, setMintForm] = useState()
+
+  const [tokenSymbols, setTokenSymbols] = useState()
 
   const changeHoldToken = (val) => {
     const token = val.target.value.split(',');
@@ -48,14 +40,29 @@ export function MintFormProvider(props) {
           setMintForm({...mintForm, takeProfit: val})
           } 
 
-          const toggleSwapOnMint = () => {
-            setMintForm({...mintForm, swapOnMint: !mintForm.swapOnMint})
-          }
+          useState(()=>{
+
+            setMintForm({
+              holdToken:'0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+              collateralToken:'0x6B175474E89094C44Da98b954EedeAC495271d0F',
+              amount:'0',
+              swapOnMint: false,
+              stopLoss: 0,
+              takeProfit:0
+            })
+
+            setTokenSymbols({
+              holdToken:'UNI',
+              collateralToken:'DAI'
+            })
+
+
+          },[url])
 
             console.log(mintForm)
 
     return (
-        <MintFormContext.Provider value={{mintForm,tokenSymbols,changeHoldToken,changeCollateralToken, changeAmount, changeStopLoss, toggleSwapOnMint, changeTakeProfit  }}>
+        <MintFormContext.Provider value={{mintForm,tokenSymbols,changeHoldToken,changeCollateralToken, changeAmount, changeStopLoss, changeTakeProfit  }}>
 
             {props.children}
 
