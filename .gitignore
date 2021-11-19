@@ -153,7 +153,6 @@ dist
 .tern-port
 
 # Stores VSCode versions used for testing VSCode extensions
-.vscode-test
 
 # yarn v2
 .yarn/cache
@@ -388,11 +387,6 @@ yarn.lock
 package-lock.json
 
 ### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 *.code-workspace
 
 # Local History for Visual Studio Code
@@ -433,3 +427,7 @@ $RECYCLE.BIN/
 cache
 artifacts
 deployments
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore

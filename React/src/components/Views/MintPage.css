@@ -1,0 +1,179 @@
+.mint-page {
+  align-items: flex-start;
+  background-color:#0a0d23;
+  position: absolute;
+  display: flex;
+  height: 1080px;
+  overflow: hidden;
+  width: 1945px;
+}
+
+.overlap-group {
+  height: 3963px;
+  margin-left: -1420px;
+  margin-top: -1442px;
+  position: relative;
+  width: 4925px;
+}
+
+.ellipse-47 {
+  height: 2883px;
+  left: 0;
+  position: absolute;
+  top: 1080px;
+  width: 2840px;
+}
+
+.ellipse-48 {
+  height: 2883px;
+  left: 2085px;
+  position: absolute;
+  top: 0;
+  width: 2840px;
+}
+
+.hero-bg {
+  height: 607px;
+  left: 834px;
+  position: absolute;
+  top: 2000px;
+  width: 2822px;
+}
+
+.frame-36597 {
+  height: 32px;
+  left: 2161px;
+  position: absolute;
+  top: 1505px;
+  width: 24px;
+}
+
+.group-33937 {
+  height: 40px;
+  left: 2340px;
+  position: absolute;
+  top: 1501px;
+  width: 105px;
+}
+
+.rectangle-141 {
+  height: 68px;
+  left: 1416px;
+  position: absolute;
+  top: 1440px;
+  width: 1953px;
+}
+
+.pool-sharks {
+  height: 12px;
+  left: 1478px;
+  position: absolute;
+  top: 1466px;
+  width: 90px;
+}
+
+.shape {
+  height: 1px;
+  left: 1420px;
+  position: absolute;
+  top: 1442px;
+  width: 1px;
+}
+
+.cahrts-1 {
+  height: 31px;
+  left: 1724px;
+  position: absolute;
+  top: 1506px;
+  width: 31px;
+}
+
+.frame-36594 {
+  overflow: hidden;
+  position: absolute;
+}
+
+.frame-36591 {
+  height: 43px;
+  left: 2331px;
+  position: absolute;
+  top: 1990px;
+  width: 122px;
+}
+
+.logo-5 {
+  height: 36px;
+  left: 1430px;
+  position: absolute;
+  top: 1455px;
+  width: 48px;
+}
+
+.vote {
+  height: 11px;
+  left: 1871px;
+  position: absolute;
+  top: 1467px;
+  width: 33px;
+}
+
+.stake {
+  height: 12px;
+  left: 1804px;
+  position: absolute;
+  top: 1466px;
+  width: 40px;
+}
+
+.manage {
+  height: 13px;
+  left: 1718px;
+  position: absolute;
+  top: 1466px;
+  width: 57px;
+}
+
+.mint {
+  height: 12px;
+  left: 1648px;
+  position: absolute;
+  top: 1466px;
+  width: 32px;
+}
+
+.group-33936 {
+  height: 280px;
+  left: 2083px;
+  position: absolute;
+  top: 1700px;
+  width: 619px;
+}
+
+.circle-logo {
+  height: 4260px;
+  margin-left: 915px;
+  margin-top: -512px;
+  width: 3000px;
+}
+
+.screen a {
+  display: contents;
+  text-decoration: none;
+}
+
+.container-center-horizontal {
+  z-index: 1;
+  display: flex;
+  background-color:#0a0d23;
+  flex-direction: row;
+  justify-content: center;
+  pointer-events: none;
+  width: 100%;
+  position: relative;
+  
+}
+
+.container-center-horizontal > * {
+  flex-shrink: 0;
+  pointer-events: auto;
+}
