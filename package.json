@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@appliedblockchain/chainlink-plugins-fund-link": "^0.0.1",
     "@openzeppelin/contracts": "^4.3.2",
     "@uniswap/v3-core": "^1.0.0",
     "@uniswap/v3-periphery": "^1.2.0",
@@ -29,9 +30,12 @@
     "solidity-coverage": "^0.7.16"
   },
   "scripts": {
-    "fork": "hardhat node --network hardhat --no-deploy --fork https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F",
+    "chain": "hardhat node --network hardhat",
+    "fork": "hardhat node --network hardhat --fork https://eth-mainnet.alchemyapi.io/v2/tOMgvfIYs5g8k6rvMVVjZEEsxT6MSMoa",
     "test": "hardhat test --network hardhat",
     "compile": "hardhat compile",
+    "deploy-local": "hardhat run --network localhost scripts/deploy.js",
+    "fund-local": "hardhat run --network localhost scripts/fund.js",
     "deploy": "hardhat deploy",
     "fund-wallet": "node scripts/fund_wallet.js"
   }

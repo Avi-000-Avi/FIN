@@ -1,6 +1,8 @@
 require("dotenv").config();
 require("@nomiclabs/hardhat-etherscan");
 require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-waffle");
+require("hardhat-gas-reporter");
 require("hardhat-deploy");
 require("hardhat-gas-reporter");
 require("solidity-coverage");
@@ -38,8 +40,9 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
+        chainId: 31337,
         url: "https://eth-mainnet.alchemyapi.io/v2/tOMgvfIYs5g8k6rvMVVjZEEsxT6MSMoa",
-        blockNumber: 13072475,
+        blockNumber: 13072476,
         accounts:
           process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       }
@@ -58,6 +61,11 @@ module.exports = {
     },
     kovan: {
       url: process.env.KOVAN_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    rinkeby: {
+      url: process.env.RINKEBY_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },

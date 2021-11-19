@@ -1,6 +1,6 @@
 const { ethers } = require("hardhat");
 
-module.exports = Object.freeze({
+module.exports = Object.freeze({ 
     TOKENS: {
         weth:           {address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",   symbol: "WETH",    decimals: 18,  amount: "0.1",      whale: "0x6555e1CC97d3cbA6eAddebBCD7Ca51d75771e0B8"},
         dai:            {address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",   symbol: "DAI",     decimals: 18,  amount: "100.0",    whale: "0x7641a5E890478Bea2bdC4CAFfF960AC4ae96886e"},

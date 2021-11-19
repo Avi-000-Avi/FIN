@@ -1,6 +1,17 @@
 const { ethers } = require("hardhat");
 const parseArgs = require("minimist");
-const ERC20_ABI = "";
+const ERC20_ABI = [
+    // Some details about the token
+    "function name() view returns (string)",
+    "function symbol() view returns (string)",
+    "function decimals() view returns (uint)",
+    "function balanceOf(address) view returns (uint)",
+    "function approve(address spender, uint256 amount)",
+    "function allowance(address owner, address spender) view returns (uint256)",
+    "function transfer(address to, uint amount)",
+    "function transferFrom(address sender, address recipient, uint256 amount)",
+    "event Transfer(address indexed from, address indexed to, uint amount)",
+];
 
 const MANDATORY_PARAMETERS = Object.freeze([
   ["amount", ["amount", "q"]],
@@ -11,7 +22,7 @@ const MANDATORY_PARAMETERS = Object.freeze([
 
 async function main() {
   const argv = parseArgs(process.argv.slice(2), {
-    string: ["address", "a", "amount", "q"],
+    string: ["address", "a", "token", "t", "whale", "w", "amount", "q"],
   });
   console.log(argv);
 
@@ -84,4 +95,4 @@ main()
   .catch((error) => {
     console.error(error);
     process.exit(1);
-  });
+});
